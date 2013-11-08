@@ -1,6 +1,14 @@
 import os
 from optparse import OptionParser
 
+""" Syntax is "python split.py [options] input size" where
+    input is the input data file
+    size is the number of lines for each chunk of data
+    -s int chooses a starting line position to start reading from
+    -e int chooses an ending line position to stop reading at
+    -d string chooses a directory to output files to
+    -o string chooses a stem to call the output files"""
+
 def parse(fileName, s, e, size):
     """ Generator returning file chunks from main file """
     with open(fileName) as f:
