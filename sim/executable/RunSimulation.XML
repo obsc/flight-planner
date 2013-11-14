@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>RunSimulation</name></assembly>
+<members>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="">
+
+</member>
+<member name="T:Program.simSettings">
+<summary>
+ Container for cached data
+</summary>
+</member>
+<member name="">
+
+</member>
+<member name="M:Program.runRoutesOverDays(Program.simSettings,System.String[],System.String)">
+<summary>
+ Parses instructions, then executes FlightQuest.simulateFlights for each day
+</summary>
+</member>
+<member name="M:Program.appSetting(System.String)">
+<summary>
+ Fetches an appSetting by the given key
+</summary>
+</member>
+<member name="M:Program.timeStampPrint(System.Diagnostics.Stopwatch,System.String)">
+<summary>
+ Prints out message at current time of stopwatch
+</summary>
+</member>
+<member name="T:Program">
+
+</member>
+</members>
+</doc>
