@@ -6,8 +6,32 @@ R = 6371000.
 def approx_eq(a, b):
     return abs(a - b) < EPS
 
-def midpoint(lat1, lat2, lon1, lon2, n):
+'takes angle in degrees and fixes it to conform to latitude '
+def fix_lat(angle):
+    if angle < -90:
+        return angle + 180
+    elif angle >90:
+        return angle - 180
+    else:
+        return angle
+
+def fix_lon(angle):
+    if angle < -180:
+        return angle + 360
+    elif angle > 180:
+        return angle - 360
+    else:
+        return angle
+
+def fix_pair(angles):
+    lat, lon = angles
+    return (fix_lat(lat), fix_lon(lon))
+
+
+def get_path(start, dest, n):
     """ See wiki: http://en.wikipedia.org/wiki/Great-circle_navigation """
+    lat1, lon1 = start
+    lat2, lon2 = dest
     phi1 = radians(lat1)
     phi2 = radians(lat2)
     lambda1 = radians(lon1)
@@ -40,14 +64,14 @@ def midpoint(lat1, lat2, lon1, lon2, n):
     def getLambda(sigma):
         return atan2(sin(alpha0)*sin(sigma), cos(sigma)) + lambda0
 
-    path = [(lat1, lon1)]
+    path = [fix_pair((lat1, lon1))]
 
     for i in xrange(1,n):
         sigma = sigma01 + (i*d/R)
         phi = degrees(getPhi(sigma))
         lambdu = degrees(getLambda(sigma))
-        path.append((phi, lambdu))
+        path.append(fix_pair((phi, lambdu)))
 
-    path.append((lat2, lon2))
+    path.append(fix_pair((lat2, lon2)))
 
     return path
