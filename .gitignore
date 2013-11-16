@@ -1,6 +1,6 @@
 allData/*
 sim/src/*
-
+data/*
 *.py[cod]
 
 # C extensions
