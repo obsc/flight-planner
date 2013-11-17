@@ -95,16 +95,16 @@ def to_latlon(northings, eastings, altitude):
     delta_3 = (56./15.) * n**3
 
     psi = (n - n_0) / (k_0 * big_a)
-    nu = (e - e_0) / (k_0 * big_a)
-    psi_prime = psi - ((beta_1 * sin(2. * 1 * nu) * cosh(2. * 1 * nu)) + 
-        (beta_2 * sin(2. * 2 * nu) * cosh(2. * 2 * nu)) + (beta_3 * sin(2. * 3 * nu) * cosh(2. * 3 * nu)))
-    nu_prime = nu - ((beta_1 * cos(2. * 1 * psi) * sinh(2. * 1 * nu)) + 
-        (beta_2 * cos(2. * 2 * psi) * sinh(2. * 2 * nu)) + (beta_3 * cos(2. * 3 * psi) * sinh(2. * 3 * nu)))
-    sigma_prime = 1. - ((2. * 1 * beta_1 * cos(2. * 1 * psi) * cosh(2. * 1 * nu)) +
-        (2. * 2 * beta_2 * cos(2. * 2 * psi) * cosh(2. * 2 * nu)) + (2. * 3 * beta_3 * cos(2. * 3 * psi) * cosh(2. * 3 * nu)))
-    tau_prime = ((2. * 1 * beta_1 * sin(2. * 1 * psi) * sinh(2. * 1 * nu)) +
-        (2. * 2 * beta_2 * sin(2. * 2 * psi) * sinh(2. * 2 * nu)) + (2. * 3 * beta_3 * sin(2. * 3 * psi) * sinh(2. * 3 * nu)))
-    chi = asin (sin(psi_prime)/cosh(nu_prime)) 
+    eta = (e - e_0) / (k_0 * big_a)
+    psi_prime = psi - ((beta_1 * sin(2. * 1 * eta) * cosh(2. * 1 * eta)) + 
+        (beta_2 * sin(2. * 2 * eta) * cosh(2. * 2 * eta)) + (beta_3 * sin(2. * 3 * eta) * cosh(2. * 3 * eta)))
+    eta_prime = eta - ((beta_1 * cos(2. * 1 * psi) * sinh(2. * 1 * eta)) + 
+        (beta_2 * cos(2. * 2 * psi) * sinh(2. * 2 * eta)) + (beta_3 * cos(2. * 3 * psi) * sinh(2. * 3 * eta)))
+    sigma_prime = 1. - ((2. * 1 * beta_1 * cos(2. * 1 * psi) * cosh(2. * 1 * eta)) +
+        (2. * 2 * beta_2 * cos(2. * 2 * psi) * cosh(2. * 2 * eta)) + (2. * 3 * beta_3 * cos(2. * 3 * psi) * cosh(2. * 3 * eta)))
+    tau_prime = ((2. * 1 * beta_1 * sin(2. * 1 * psi) * sinh(2. * 1 * eta)) +
+        (2. * 2 * beta_2 * sin(2. * 2 * psi) * sinh(2. * 2 * eta)) + (2. * 3 * beta_3 * sin(2. * 3 * psi) * sinh(2. * 3 * eta)))
+    chi = asin (sin(psi_prime)/cosh(eta_prime)) 
     phi = chi + (delta_1 * sin(2. * 1 * chi)) + (delta_2 * sin(2. * 2 * chi)) + (delta_3 * sin(2. * 3 * chi))
     lambda_0 = 0
     lambdu = 0 
