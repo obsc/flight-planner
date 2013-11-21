@@ -1,0 +1,41 @@
+\documentclass{article}[12pt]
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{framed}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage[margin=2.5cm]{geometry}
+\begin{document}
+\begin{framed}
+\noindent
+\large{\textbf{CS 4780: Machine Learning \hfill Project Proposal}}
+\end{framed}
+\hspace*{\fill}\\
+\Large{\textbf{The Team}}
+
+\hspace*{\fill}\\
+\Large{\textbf{Motivation}}
+\\
+
+Previously, we trained machine learning algorithms on relatively small amounts of filtered training data and performed simple classification on test cases. The project that we have selected, General Electric Company's Kaggle competition, presents us with the opportunity to apply what we have learned to a higher level learning problem. Our motivation to complete this project comes from our desire to overcome the challenges involved with solving a different type of problem than what we are used to (such as working with sizable amounts of data, some of which may be irrelevant) in order to produce an optimization algorithm that can be used to make future processes more efficient.
+\\[\baselineskip]
+%\Large{\textbf{The Task}}
+%\\[\baselineskip]
+
+%\Large{\textbf{General Approach}}
+%\\[\baselineskip]
+\noindent
+\Large{\textbf{Resources}}
+\begin{itemize}
+	\item Data sets provided to us by the GE Kaggle competition site
+	\item Software: 
+		\begin{enumerate}[(a)]
+			\item Flight Quest Simulator (FQS) provided to us by the GE Kaggle competition site to visually represent flight paths
+			\item Microsoft Visual Studio 2012 to used for read the source code for the FQS
+			\item Python 2.7 (and libraries) to develop our data processing and machine learning algorithms
+		\end{enumerate}
+\end{itemize}
+\hspace*{\fill}\\
+\Large{\textbf{Schedule}}
+\end{document}
