@@ -8,8 +8,6 @@
 \large{\textbf{CS 4780: Machine Learning \hfill Project Proposal}}
 \end{framed}
 
-\noindent\Large{\textbf{The Team}}\\
-\noindent We have four members in our team.\\\\
 \noindent\Large{\textbf{Motivation}}\\
 \noindent Previously, we trained machine learning algorithms on relatively small amounts of filtered training data and performed simple classification on test cases. The project that we have selected, General Electric Company's Kaggle competition, presents us with the opportunity to apply what we have learned to a structured output problem. Our motivation to complete this project comes from our desire to overcome the challenges involved with solving a different type of problem than what we are used to (such as working with sizable amounts of data, some of which may be irrelevant) in order to produce an optimization algorithm that can be used to make future real-life processes more efficient.
 
@@ -31,12 +29,13 @@ If the problem, with such layers of challenges, is solved effectively, its appli
 \noindent
 \Large{\textbf{General Approach}}%\\
 \begin{enumerate}
-	\item We will prune the input data to reduce complexity by assigning weights based on the relevance of the features. For example, customer dissatisfaction could be considered much less than weather conditions. 
-	\item As the input data is too large to directly work with, we will use methods that don't require loading the whole training set or using ensemble methods. Also, we will transform the data to make it more tractable.
-	\item By splitting the data into more manageable chunks, we can construct trained models on subsets of the total data in order to speed up the training process and run our learning algorithm concurrently.
+	\item How we have structured the problem is that we begin from the most direct path to our destination. We then tweak this path in order to satisfy competition rules such as avoiding restricted areas. Once we have our base path, we go along it and check at certain waypoints if deviating from our base path will produce a more optimal solution. 
+	\item We will determine what constitutes a more optimal solution by prioritizing conditions that optimize our fuel consumption via flight speed and altitude (such as turbulence and jetstreams. Conditions that are difficult to decipher and do not provide as much information, like weather, will be considered later if time permits while more irrlevant information, like customer dissatisfaction, will either be weighed less as features or not be considered as features at all.
+	\item We will model all of the conditions we consider separately using Markov models. In order to do this, we will train on the data given to us and attempt to associate the existence and severity of the condition with a given set of coordinates. We are also looking into using SVM perf and regression techniques to perform other types of classification.
+	\item As the input data is too large to directly work with, we will use methods that don't require loading the whole training set or using ensemble methods. Also, we will transform the data to make it more tractable. By splitting the data into more manageable chunks, we can construct trained models on subsets of the total data in order to speed up the training process and run our learning algorithm concurrently.
 	\item We will have a unifying method for the models to reduce time spent on recomputation and allow for quick modifications on certain data sets or partial retraining.
 	\item We will use the model constructed along with the parameters given to determine the most optimal flight path from a source to destination.
-	\item We plan to first train for optimal flight speed and altitude given the parameters in the training set which include weight, distance remaining, and the current position of the aircraft. We plan to try various regression techniques like k-nearest neighbor and SVM for regression. With these parameters, we plan to follow the shortest path which is along the great circle. Further enhancements include adapting to geography (jetstreams may make a divergent path cost less), weather, or turbulent zones.
+	%\item We plan to first train for optimal flight speed and altitude given the parameters in the training set which include weight, distance remaining, and the current position of the aircraft. We plan to try various regression techniques like k-nearest neighbor and SVM for regression. With these parameters, we plan to follow the shortest path which is along the great circle. Further enhancements include adapting to geography (jetstreams may make a divergent path cost less), weather, or turbulent zones.
 \end{enumerate}
 %\\[\baselineskip]
 \noindent
@@ -57,8 +56,9 @@ If the problem, with such layers of challenges, is solved effectively, its appli
 \noindent
 \begin{itemize}
 	\item Nov. 24: Have a few methods of training, have data transformed
-	\item Nov. 26: Work on predicting other things
+	\item Nov. 26: Work on predicting effect on flight speed and altitude by progressing through a certain coordinate
 	\item Nov. 29: Begin final report and poster
-	\item Dec 7: Finish refinements on code and report 
+	\item Dec. 3: Finalizing our overall path-prediction algorithm.
+	\item Dec. 7: Finish refinements on code and report 
 \end{itemize}
 \end{document}
