@@ -26,9 +26,8 @@ If the problem, with such layers of challenges, if solved effectively, its appli
 	\item Study the feasibility of distributing the load among several clients to increase the speed of learning/prediction
 	\item Generating an optimal path rather than classifying a single instance (structured output)
 \end{itemize}
-\\[\baselineskip]
 \noindent
-\Large{\textbf{General Approach}}%\\
+\Large{\\\textbf{General Approach}}%\\
 \begin{enumerate}
     \item How we have structured the problem is that we begin from the most direct path to our destination. We then tweak this path in order to satisfy competition rules such as avoiding restricted areas. Once we have our base path, we go along it and check at certain waypoints if deviating from our base path will produce a more optimal solution. 
     \item We will determine what constitutes a more optimal solution by prioritizing conditions that optimize our fuel consumption via flight speed and altitude (such as turbulence and jetstreams). Conditions that are difficult to decipher and do not provide as much information, like weather, will be considered later if time permits while more irrelevant information, like customer dissatisfaction, will either be weighed less as features or not be considered as features at all.
