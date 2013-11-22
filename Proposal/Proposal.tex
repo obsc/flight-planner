@@ -13,9 +13,8 @@
 
 The problem statement is that we are given flight information (point of origin/destination/other flights arriving at the same time, etc) and we would have to predict the cost of a given path. Using this, one has to provide the most profitable route for the pilot to follow. Other flight paths also add to the cost of the current flight. Predicting the outcome of an event alone, while challenging on its own, is not sufficient. We would have to take into account unforseen circumstances and come up with a solution that is robust to withstand eventualities in the future. For example, a flight under certain weather conditions may be low cost, but under a different weather forecast may become quite infeasible. This leads to a learning problem that is more complex than those encountered in a typical machine learning setting. Adding to the complexity in the problem, the data set is quite rich in information and dimensionality. An ideal algorithm would have to bring out the hidden dependencies in such unrelated data.
 
-If the problem, with such layers of challenges, is solved effectively, its application would not only bring down costs of flight travel, but its principles could be used in other related fields, like financial market analysis and prediction, planning profitable freight routes through other means of transportation, among others. Development of novel methods to unravel previously intractable problems is one of the leading motivations for us to take up this problem.
-
-\\[\baselineskip]
+If the problem, with such layers of challenges, is solved effectively, its application would not only bring down costs of flight travel, but its principles could be used in other related fields, like financial market analysis and prediction, planning profitable freight routes through other means of transportation, among others. Development of novel methods to unravel previously intractable problems is one of the leading motivations for us to take up this problem.\\
+[\baselineskip]
 \noindent
 \Large{\textbf{The Task}} \\
 \noindent The main objective of the solution is to present an optimized flight plan to the pilot, to minimize costs given the training set, which contains information about flight and weather. We are provided with a cost function in a simulator to evaluate the expense undertaken to complete a flight path given predicted weather and ground conditions. True evaluation can only be achieved by submitting to the contest website, in which five submissions are allowed per day.
@@ -29,28 +28,34 @@ If the problem, with such layers of challenges, is solved effectively, its appli
 \noindent
 \Large{\textbf{General Approach}}%\\
 \begin{enumerate}
-	\item How we have structured the problem is that we begin from the most direct path to our destination. We then tweak this path in order to satisfy competition rules such as avoiding restricted areas. Once we have our base path, we go along it and check at certain waypoints if deviating from our base path will produce a more optimal solution. 
-	\item We will determine what constitutes a more optimal solution by prioritizing conditions that optimize our fuel consumption via flight speed and altitude (such as turbulence and jetstreams. Conditions that are difficult to decipher and do not provide as much information, like weather, will be considered later if time permits while more irrlevant information, like customer dissatisfaction, will either be weighed less as features or not be considered as features at all.
-	\item We will model all of the conditions we consider separately using Markov models. In order to do this, we will train on the data given to us and attempt to associate the existence and severity of the condition with a given set of coordinates. We are also looking into using SVM perf and regression techniques to perform other types of classification.
-	\item As the input data is too large to directly work with, we will use methods that don't require loading the whole training set or using ensemble methods. Also, we will transform the data to make it more tractable. By splitting the data into more manageable chunks, we can construct trained models on subsets of the total data in order to speed up the training process and run our learning algorithm concurrently.
-	\item We will have a unifying method for the models to reduce time spent on recomputation and allow for quick modifications on certain data sets or partial retraining.
-	\item We will use the model constructed along with the parameters given to determine the most optimal flight path from a source to destination.
-	%\item We plan to first train for optimal flight speed and altitude given the parameters in the training set which include weight, distance remaining, and the current position of the aircraft. We plan to try various regression techniques like k-nearest neighbor and SVM for regression. With these parameters, we plan to follow the shortest path which is along the great circle. Further enhancements include adapting to geography (jetstreams may make a divergent path cost less), weather, or turbulent zones.
+    \item How we have structured the problem is that we begin from the most direct path to our destination. We then tweak this path in order to satisfy competition rules such as avoiding restricted areas. Once we have our base path, we go along it and check at certain waypoints if deviating from our base path will produce a more optimal solution. 
+    \item We will determine what constitutes a more optimal solution by prioritizing conditions that optimize our fuel consumption via flight speed and altitude (such as turbulence and jetstreams). Conditions that are difficult to decipher and do not provide as much information, like weather, will be considered later if time permits while more irrelevant information, like customer dissatisfaction, will either be weighed less as features or not be considered as features at all.
+    \item We will model all of the conditions we consider separately using Markov models. In order to do this, we will train on the data given to us and attempt to associate the existence and severity of the condition with a given set of coordinates. We will also be looking into regression techniques in order to generate altitute and airspeed output.
+    \item As the input data is too large to directly work with, we will transform the data to make it more tractable. By splitting the data into more manageable chunks, we can construct trained models on subsets of the total data in order to speed up the training process. Also, by doing so, we can consider each of these models separately and then determine the relevance of each parameter. 
+    \item We will use the model constructed along with the parameters given to determine the most optimal flight path from a source to destination.
+    %\item We plan to first train for optimal flight speed and altitude given the parameters in the training set which include weight, distance remaining, and the current position of the aircraft. We plan to try various regression techniques like k-nearest neighbor and SVM for regression. With these parameters, we plan to follow the shortest path which is along the great circle. Further enhancements include adapting to geography (jetstreams may make a divergent path cost less), weather, or turbulent zones.
 \end{enumerate}
 %\\[\baselineskip]
 \noindent
+\Large{\textbf{Progress}}
+\begin{enumerate}
+		\item We have already managed to generate a naive model where it just tries to coast at a consistent alititude with a consistent airspeed in a great circle path between two points.
+		\item We are currently working on determining an optimal airspeed and airspeed based on our input data files. After that, we will be trying to extend that predicting the best movement to make at each point in time based on the the training data.
+\end{enumerate}
+\noindent
 \Large{\textbf{Resources}}
 \begin{itemize}
-	\item Data sets provided to us by the GE Kaggle competition site
-	\item Software: 
-		\begin{enumerate}[(a)]
-			\item FlightQuest Simulator (FQS) provided to us by the GE Kaggle competition site to produce regression values
-			\item Microsoft Visual Studio 2012 to used for read the FQS source code
-			\item Python 2.7 (and libraries) to develop our data processing and machine learning algorithms
-			\item SciKit Learn for various learning algorithms using regression
-		\end{enumerate}
-	\item Readings on structured output. 
-\end{itemize}
+    \item Data sets provided to us by the GE Kaggle competition site
+    \item Software: 
+        \begin{enumerate}[(a)]
+            \item FlightQuest Simulator (FQS) provided to us by the GE Kaggle competition site to produce regression values
+            \item Microsoft Visual Studio 2012 to used for read the FQS source code
+            \item Python 2.7 (and libraries) to develop our data processing and machine learning algorithms
+            \item SciKit Learn for various learning algorithms using regression
+            \item GeoPy for handling spherical coordinates of Earth.
+        \end{enumerate}
+    \item Readings on structured output. 
+   \end{itemize}
 \hspace*{\fill}\\
 \Large{\textbf{Schedule}}
 \noindent
