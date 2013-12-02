@@ -24,3 +24,8 @@ def airportToLatLon(airportID):
     else:
       pass
   raise InvalidAirport(airportID + ' was not founds')
+
+def airportDistance(airportID1, airportID2):
+  lat1, lon1 = airportToLatLon(airportID1)
+  lat2, lon2 = airportToLatLon(airportID2)
+  return distance(lat1,lon1,lat2,lon2)
