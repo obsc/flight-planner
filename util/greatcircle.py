@@ -1,7 +1,7 @@
 from math import pi, cos, sin, tan, radians, acos, asin, atan2, degrees, sinh, cosh
 
 EPS = 1e-6
-R = 6371000.
+R = 6371.000
 
 def approx_eq(a, b):
     return abs(a - b) < EPS
@@ -27,6 +27,24 @@ def fix_pair(angles):
     lat, lon = angles
     return (fix_lat(lat), fix_lon(lon))
 
+def get_dist(start, dest):
+    """ See wiki: same page as path """
+    lat1, lon1 = start
+    lat2, lon2 = dest
+    phi1 = radians(lat1)
+    phi2 = radians(lat2)
+    lambda1 = radians(lon1)
+    lambda2 = radians(lon2)
+    lambda12 = lambda2 - lambda1
+    if lambda12 > pi:
+        lambda12 = lambda12 - 2*pi
+    elif lambda12 < -pi:
+        lambda12 = lambda12 + 2*pi
+
+    sigma12 = acos(sin(phi1)*sin(phi2) + cos(phi1)*cos(phi2)*cos(lambda12))
+
+    return R*sigma12
+
 
 def get_path(start, dest, n):
     """ See wiki: http://en.wikipedia.org/wiki/Great-circle_navigation """
@@ -48,6 +66,7 @@ def get_path(start, dest, n):
     sigma12 = acos(sin(phi1)*sin(phi2) + cos(phi1)*cos(phi2)*cos(lambda12))
 
     s12 = R*sigma12
+
     d = s12/n
 
     alpha0 = asin(sin(alpha1)*cos(phi1))
