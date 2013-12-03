@@ -1,4 +1,17 @@
-from math import sin, cos, atan2
+from math import sin, cos, atan2, sqrt
+
+airportDict = dict()
+
+def genAirportDict():
+  with open('dat/AirportsLatLong.csv') as f:
+    f.readline()
+    for line in f:
+      stuff = line.split(',')
+      airportID = stuff[0]
+      lat, lon = (float(stuff[1]),float(stuff[2]))
+      airportDict[airportID] = (lat, lon)
+
+genAirportDict()
 
 class InvalidAirport(Exception):
   def __init__(self, value):
@@ -13,17 +26,10 @@ def distance(lat1, lon1, lat2, lon2):
   return 6371 * c #6371 radius of earth in km
 
 def airportToLatLon(airportID):
-  f = open('dat/AirportsLatLong.csv')
-  f.readline()
-  for line in f:
-    stuff = line.split(',')
-    if stuff[0] == airportID:
-      lat = float(stuff[1])
-      lon = float(stuff[2])
-      return (lat, lon)
-    else:
-      pass
-  raise InvalidAirport(airportID + ' was not founds')
+  if airportID in airportDict:
+    return airportDict[airportID]
+  else:
+    raise InvalidAirport(airportID + ' was not founds')
 
 def airportDistance(airportID1, airportID2):
   lat1, lon1 = airportToLatLon(airportID1)

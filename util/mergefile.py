@@ -9,7 +9,10 @@ def sorter(line):
     stuff = line.split(' ')
     return int(stuff[0]) * 1000 + int(stuff[1])
 
-comp = lambda x: int(x)
+asdiposition = lambda x: int(x.split(',')[7])
+asdiflightplan = lambda x: int(x.split(',')[2])
+flighthistory = lambda x:int(x.split(',')[0])
+comp = flighthistory
 timesMerged = [0]
 timesMergedUp = [0]
 
