@@ -100,7 +100,7 @@ def no_fly_avoidance_waypoints(no_fly_zones, flight, airport, cruise=38000, desc
     return waypoints
 
 def save_waypoints(file_name, waypoints):
-    waypoints_header = ["FlightId", "Ordinal", "LatitudeDegrees", "LongitudeDegrees", "AltitudeFeet", "AirspeedKnots"]
+    waypoints_header = ["FlightId", "Ordinal", "Latitude", "Longitude", "Altitude", "AirSpeed"]
     waypoints.insert(0, waypoints_header)
     writer = csv.writer(open(os.path.join(output_path(), file_name), "w"), lineterminator="\n")
     writer.writerows([[str(x) for x in waypoint] for waypoint in waypoints])
