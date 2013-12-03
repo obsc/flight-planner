@@ -25,6 +25,38 @@ def mapToMaxAltSpeed():
   f.close()
   g.close()
 
+def mapToPercentileSpeed(percentile):
+  f= open('../data/GEKaggle/TTrain/training2_asdiposition.csv')
+  f.readline()
+  g = open('../data/GEKaggle/TTrain/training2_speedalt','w')
+  line = f.readline()
+  line = line.split(',')
+  flightHistID = int(line[7])
+  flightSpeed = [int(line[4])]
+  flightAltitude = [int(line[3])]
+  for line in f:
+    lines = line.split(',')
+    try:
+      if int(lines[7]) == flightHistID:
+        flightSpeed.append(int(lines[4]))
+        flightAltitude.append(int(lines[3]))
+      else:
+        flightSpeed.sort()
+        flightAltitude.sort()
+        g.write('%i %i %i\n' % (flightHistID, flightSpeed[int(len(flightSpeed)*percentile)], 
+          flightAltitude[int(len(flightAltitude)*percentile)]))
+        flightHistID = int(lines[7])
+        flightSpeed = [int(lines[4])]
+        flightAltitude = [int(lines[3])]
+    except ValueError:
+      print line
+  flightSpeed.sort()
+  flightAltitude.sort()
+  g.write('%i %i %i\n' % (flightHistID, flightSpeed[int(len(flightSpeed)* percentile)], 
+    flightAltitude[int(len(flightSpeed) * percentile)]))
+  f.close()
+  g.close() 
+
 def mapToDistance():
   missingAirports = dict()
   f = open('../data/GEKaggle/TTrain/training2_flighthistory.csv')
