@@ -1,6 +1,8 @@
 import csv
 import greatcircle
 
+SPLITNUM = 50
+
 def load_paths():
     f = csv.reader(open("dat/sampleSubmission.csv"))
     g = csv.reader(open("dat/TestFlights.csv"))
@@ -29,11 +31,29 @@ def expand_path(path, n):
             dists.append(greatcircle.get_dist((px,py),(cx,cy)))
         prev = pos
     totalDist = sum(dists)
-    print totalDist
+    n = n - len(dists)
+    newPath = [path[0]]
+    for i in xrange(len(dists)):
+        split = int(n * (dists[i] / totalDist))
+        (sx, sy, salt, sspd) = path[i]
+        (ex, ey, ealt, espd) = path[i + 1]
+        start = (sx, sy)
+        end = (ex, ey)
+
+        posList = greatcircle.get_path(start, end, split + 1)
+        for i in xrange(len(posList)):
+            (x,y) = posList[i]
+            alt = ealt
+            spd = espd
+            posList[i] = (x,y,alt,spd)
+
+        newPath = newPath + posList[1:]
+
+    return newPath
 
 def expand_paths(paths, n):
     for k in paths.keys():
-        expand_path(paths[k], n)
+        paths[k] = expand_path(paths[k], n)
 
 def paths_to_waypoints(paths):
     waypoints = []
@@ -55,6 +75,6 @@ def write_file(f, waypoints):
 
 if __name__ == "__main__":
     paths = load_paths()
-    expand_paths(paths, 100)
+    expand_paths(paths, SPLITNUM)
     waypoints = paths_to_waypoints(paths)
     write_file("dat/output.csv", waypoints)
