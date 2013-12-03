@@ -26,6 +26,7 @@ def mapToMaxAltSpeed():
   g.close()
 
 def mapToDistance():
+  missingAirports = dict()
   f = open('../data/GEKaggle/TTrain/training2_flighthistory.csv')
   f.readline()
   g = open('../data/GEKaggle/TTrain/training2_distance','w')
@@ -39,11 +40,18 @@ def mapToDistance():
       distance = Distance.airportDistance(start, end)
       g.write('%i %f %s %s\n' % (flightHistID, distance, start, end))
     except ValueError:
-      count += 1
+      print line
     except Distance.InvalidAirport:
       count += 1
+      if start not in missingAirports:
+        missingAirports[start] = 0
+      else:
+        pass
+      if end not in missingAirports:
+        missingAirports[end] = 0
   print str(count)
   g.close()
   f.close()
+  return missingAirports
 
 
