@@ -24,14 +24,14 @@ def extract(indexList, infile, outfile):
 Accumulates the data in every file in infileList and creates a new file outfile
 containing all of the information
 """
-def accumulate(infileList, outfile):
+def accumulate(infileList, idIndexList, indexListList, outfile):
 
   # Find all of the ids in the files and sort
   idList = []
-  for filename in infileList:
-    f = open(filename)
+  for index in range(0,len(infileList)):
+    f = open(infileList[index])
     for line in f: 
-      idList.append(int(line.split(',')[0]))
+      idList.append(int(line.split(',')[idIndexList[index]]))
     f.close()
   idList.sort()
   idSet = list(set(idList))
@@ -39,6 +39,8 @@ def accumulate(infileList, outfile):
   out = open(outfile, 'r+')
   # Open files one at a time
   for i in range(0,len(infileList)):
+    indexList = indexListList[i]
+
     out.seek(0)
     f = open(infileList[i])
     # uncomment if first line is text
@@ -54,22 +56,26 @@ def accumulate(infileList, outfile):
       else:
         str_build += out.readline().rstrip('\n') + ','
       last_pos = f.tell()
-      lines = f.readline().split(',')
+      lines = f.readline().rstrip('\n').split(',')
+      if lines[idIndexList[i]] == '':
+        break
+      print lines
       # If id doesn't match up, append empty
-      if int(lines[0]) != idSet[j]: 
-        for index in range(1,(len(lines))): 
-          if index == len(lines) - 1:
+      if int(lines[idIndexList[i]]) != idSet[j]: 
+        for index in range(0,len(indexList)): 
+          if index == len(indexList) - 1:
             str_build += '\n'
             f.seek(last_pos)
           else:
             str_build += ','
       # Otherwise, append the information
       else: 
-        for index in range(1,(len(lines))): 
-          if index == len(lines) - 1:
-            str_build += lines[index]
+        for index in range(0,(len(indexList))): 
+          str_build += lines[indexList[index]]
+          if index < len(indexList) - 1:
+            str_build += ','
           else:
-            str_build += lines[index] + ','
+            str_build += '\n'
       j +=1
     f.close()
     # Rewrite the file with the new contents
