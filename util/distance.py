@@ -5,7 +5,7 @@ import greatcircle
 airportDict = dict()
 
 def genAirportDict():
-  with open('dat/AirportsLatLong.csv') as f:
+  with open('AirportsLatLong.csv') as f:
     f.readline()
     for line in f:
       stuff = line.split(',')
@@ -35,4 +35,4 @@ def airportDistance(airportID1, airportID2):
 
 def distanceToAirport(lat1, lon1, airportID):
   lat2, lon2 = airportToLatLon(airportID)
-  return greatcircle.get_dist(lat1, lon1, lat2, lon2)
+  return greatcircle.get_dist((lat1, lon1), (lat2, lon2))

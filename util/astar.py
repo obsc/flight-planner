@@ -3,7 +3,7 @@ from shapely.geometry import LineString, Polygon
 no_fly_zones = []
 
 def populateNoFlyZones():
-  zones = pandas.read_csv('../basicAgent/restrictedZones.csv')
+  zones = pandas.read_csv('restrictedZones.csv')
   vertices = zones['LatLongVertices']
   points = [[[float(x) for x in c.split(':')] for c in l.split(' ')] for l in vertices]
   polygons = [Polygon(x) for x in points]
@@ -44,6 +44,35 @@ def airport_path(AirportID1, AirportID2, spread):
   goal = distance.airportToLatLon(AirportID2)
   path = a_star(start, goal, spread)
   return path
+
+def to_airport(coord, AirportID):
+  lat, lon = coord
+  goal = distance.airportToLatLon(AirportID)
+  initialSpread = 10
+  path = a_star((lat,lon), goal, initialSpread)
+  dist = pathDist(path)
+  opt_dist = distance.distanceToAirport(lat,lon,AirportID)
+  while dist / opt_dist > 1.03:
+    initialSpread += 5
+    path = a_star((lat,lon), goal, initialSpread)
+    dist = pathDist(path)
+    if initialSpread >= 50:
+      break
+  return path
+
+def to_coord(start, goal):
+  initialSpread = 10
+  path = a_star(start, goal, initialSpread)
+  dist = pathDist(path)
+  opt_dist = greatcircle.get_dist(start,goal)
+  while dist / opt_dist > 1.03:
+    initialSpread += 5
+    path = a_star(start, goal, initialSpread)
+    dist = pathDist(path)
+    if initialSpread >= 50:
+      break
+  return path
+
 
 def a_star(start, goal, spread):
   nodes = getNodes(start, goal, spread)
