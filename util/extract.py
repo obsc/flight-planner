@@ -1,24 +1,29 @@
+import csv
+
+def write_file(outfile, out):
+  writer = csv.writer(open(outfile,'a'), lineterminator='\n')
+  writer.writerows(out)
+
 '''
   given int list of 0-based indices of which columns, returns new csv
   with the attributes labeled at the top
 '''
-def extract(indexList, infile, outfile):
-  f = open(infile)
-  g = open(outfile,'w')
-  temp = line.split(f.readline())
-  for index in indexList:
-    str_build += temp[indexList] + ','
-  str_build = str_build[0:len(str_build)-1] + '\n'
-  g.write(str_build)
-  for line in infile:
-    str_build = ''
-    temp = line.split(',')
-    for index in indexList:
-      str_build += temp[indexList] + ','
-    str_build  = str_build[0:len(str_build)-1] + '\n'
-    g.write(str_build)
-  f.close()
-  g.close()
+def extract(indexList, infile, outfile, chunk):
+  temp = open(outfile,'w')
+  temp.close()
+  f = csv.reader(open(infile))
+  out = []
+
+  line = 0
+  for row in f:
+    line += 1
+    if line % chunk == 0:
+      write_file(outfile, out)
+      out = []
+    out.append([row[i] for i in indexList])
+
+  write_file(outfile, out)
+
 
 """
 Accumulates the data in every file in infileList and creates a new file outfile
@@ -59,7 +64,7 @@ def accumulate(infileList, idIndexList, indexListList, outfile):
       lines = f.readline().rstrip('\n').split(',')
       if lines[idIndexList[i]] == '':
         break
-      print lines
+      #print lines
       # If id doesn't match up, append empty
       if int(lines[idIndexList[i]]) != idSet[j]: 
         for index in range(0,len(indexList)): 
