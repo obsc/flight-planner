@@ -4,6 +4,7 @@ from math import atan2, cos, pi, sin
 import os
 import pandas as pd
 from shapely.geometry import LineString, Polygon
+import astar
 
 def input_path():
     if "DataPath" in os.environ:
@@ -79,7 +80,8 @@ def avoid_no_fly_zone(no_fly_zone, waypoints, flight_loc, first_waypoint_loc, pa
     i1, zone_loc_1 = move_point(no_fly_zone, flight_loc, first_waypoint_loc, zone_loc, delta_x, delta_y, 1.0)
     i2, zone_loc_2 = move_point(no_fly_zone, flight_loc, first_waypoint_loc, zone_loc, delta_x, delta_y, -1.0)
 
-    print(min(i1, i2))
+    if min(i1, i2) == 100:
+        print waypoints[0][0]
 
     if i1 < i2:
         waypoints.insert(0, [waypoints[0][0], 0, zone_loc_1[0], zone_loc_1[1], waypoints[0][4], waypoints[0][5]])
@@ -88,15 +90,49 @@ def avoid_no_fly_zone(no_fly_zone, waypoints, flight_loc, first_waypoint_loc, pa
     return waypoints
 
 def no_fly_avoidance_waypoints(no_fly_zones, flight, airport, cruise=38000, descend_distance=150, speed=500):
+    print flight["FlightHistoryId"]
     waypoints = direct_route_waypoints(flight, airport, cruise, descend_distance, speed)
     flight_loc = (flight["CurrentLatitude"], flight["CurrentLongitude"])
     first_waypoint_loc = (waypoints[0][2], waypoints[0][3])
-    path = LineString([flight_loc, first_waypoint_loc])
+    path1 = LineString([flight_loc, first_waypoint_loc])
+    
+    has_second = len(waypoints) > 1
 
     for no_fly_zone in no_fly_zones:
-        if path.intersects(no_fly_zone):
-            waypoints = avoid_no_fly_zone(no_fly_zone, waypoints, flight_loc, first_waypoint_loc, path)
+        if path1.intersects(no_fly_zone):
+            astarpath = astar.to_coord(flight_loc, first_waypoint_loc)[1:]
+            alt = waypoints[0][4]
+            spd = waypoints[0][5]
+            lastwp = []
+            if has_second:
+                lastwp = [waypoints[1]]
+            waypoints[:] = []
+            for i in range(len(astarpath)):
+                (x,y) = astarpath[i]
+                waypoints.append([flight["FlightHistoryId"], i+1, x, y, alt, spd])
+            if has_second:
+                lastwp[0][1] = i + 2
+            waypoints += lastwp
             break
+
+    if not has_second:
+        return waypoints
+
+    second_waypoint_loc = (waypoints[-1][2], waypoints[-1][3])
+    path2 = LineString([first_waypoint_loc, second_waypoint_loc])
+
+    for no_fly_zone in no_fly_zones:
+        if path2.intersects(no_fly_zone):
+            astarpath = astar.to_coord(first_waypoint_loc, second_waypoint_loc)[1:]
+            alt = waypoints[-1][4]
+            spd = waypoints[-1][5]
+            off = waypoints[-1][1]
+            waypoints[:] = waypoints[:-1]
+            for i in range(len(astarpath)):
+                (x,y) = astarpath[i]
+                waypoints.append([flight["FlightHistoryId"], i+off, x, y, alt, spd])
+            break
+
     return waypoints
 
 def save_waypoints(file_name, waypoints):
