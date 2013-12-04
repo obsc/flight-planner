@@ -29,7 +29,7 @@ def mapToVectors(asdipositionsorted, sortedFlightHistory, airportFile, outfile):
         g.write('%s,%s,%f,%f,%f,%f,%f,%f,%s,%i,%i\n' % (curFHID, time, lat, lon, angle,bearing,float(stuff[5]),float(stuff[6]),airport_dict[curFHID], altitude, speed))
       else:
         pass
-      if stuff[7] in validAirportSet:
+      if airport_dict[stuff[7]] in validAirportSet:
         curFHID = stuff[7]
         lat = float(stuff[5])
         lon = float(stuff[6])
