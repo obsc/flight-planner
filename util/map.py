@@ -1,4 +1,4 @@
-import Distance
+
 def mapToMaxAltSpeed():
   f= open('../data/GEKaggle/TTrain/training2_asdiposition.csv')
   f.readline()
@@ -26,9 +26,9 @@ def mapToMaxAltSpeed():
   g.close()
 
 def mapToPercentileSpeed(percentile):
-  f= open('../data/GEKaggle/TTrain/training2_asdiposition.csv')
+  f= open('../allData/ttrain/training2_asdiposition.csv')
   f.readline()
-  g = open('../data/GEKaggle/TTrain/training2_speedalt','w')
+  g = open('../allData/ttrain/training2_speedaltquarter','w')
   line = f.readline()
   line = line.split(',')
   flightHistID = int(line[7])
