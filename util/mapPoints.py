@@ -1,13 +1,15 @@
 from math import atan2, sin, cos
+import sets
 
 def calcBearing(lat1, lon1, lat2, lon2):
   lon_diff = lon2 - lon1
   bearing = atan2( sin(lon_diff) * cos(lat2), cos(lat1) * sin(lat2) -sin(lat1)*cos(lat2)*cos(lon_diff))
   return bearing
 
-def mapToVectors(asdipositionsorted, sortedFlightHistory, outfile):
+def mapToVectors(asdipositionsorted, sortedFlightHistory, airportFile, outfile):
   f = open(asdipositionsorted)
   g = open(outfile, 'w')
+  validAirportSet = validAirports(airportFile)
   g.write('FlightHistoryID,Time,Latitude,Longitude,Angle,Bearing,NextLat,NextLon,Airport,Altitude,Speed\n')
   airport_dict = mapToDestination(sortedFlightHistory)
   line = f.readline()
@@ -27,12 +29,15 @@ def mapToVectors(asdipositionsorted, sortedFlightHistory, outfile):
         g.write('%s,%s,%f,%f,%f,%f,%f,%f,%s,%i,%i\n' % (curFHID, time, lat, lon, angle,bearing,float(stuff[5]),float(stuff[6]),airport_dict[curFHID], altitude, speed))
       else:
         pass
-      curFHID = stuff[7]
-      lat = float(stuff[5])
-      lon = float(stuff[6])
-      time = stuff[1]
-      speed = int(stuff[4])
-      altitude = int(stuff[3])
+      if stuff[7] in validAirportSet:
+        curFHID = stuff[7]
+        lat = float(stuff[5])
+        lon = float(stuff[6])
+        time = stuff[1]
+        speed = int(stuff[4])
+        altitude = int(stuff[3])
+      else:
+        pass
     except ValueError:
       print 'GODDAMMIT'
   f.close()
@@ -53,3 +58,14 @@ def mapToDestination(sortedFlightHistory):
   f.close()
   print 'done'
   return fhid_dict
+
+def validAirports(airportFile):
+  return_set = sets.Set()
+  f = open(airportFile)
+  f.readline()
+  for line in f:
+    stuff = line.strip().split(',')
+    airportID = stuff[0]
+    return_set.add(airportID)
+  f.close()
+  return return_set
