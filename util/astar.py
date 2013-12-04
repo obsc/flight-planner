@@ -43,8 +43,6 @@ def airport_path(AirportID1, AirportID2, spread):
   start = distance.airportToLatLon(AirportID1)
   goal = distance.airportToLatLon(AirportID2)
   path = a_star(start, goal, spread)
-  print str(pathDist(path))
-  print str(greatcircle.get_dist(start, goal))
   return path
 
 def a_star(start, goal, spread):
