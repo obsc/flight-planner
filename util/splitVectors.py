@@ -3,27 +3,27 @@ import sklearn.ensemble as ske
 import sklearn.neighbors as skn
 import distance
 import sim
-import sklearn.linear_model as skl
-import sklearn.tree as skt
-import sklearn.svm as svs
+import smooth
 
 def newModel():
-  model = ske.ExtraTreesRegressor()
-  #model = ske.GradientBoostingRegressor()
+  #model = ske.ExtraTreesRegressor()
+  model = ske.GradientBoostingRegressor()
   #model = skn.KNeighborsRegressor(n_neighbors=10,weights='distance',algorithm='auto')
   return model
 
-def vectorProduction(testFlights, submission, vectorFileBase, outsubmission):
+def vectorProduction(testFlights, submission, vectorFileBase, outsubmissionbased):
   airports = ['KPSP','KCID','KCOS','KFAT','KXNA','KLIT','KTUS','KDSM','KTUL','KPBI','KELP','KRSW','KLGB','KBUR','KOKC','KONT','KDAL','KABQ','KCMH','KMKE','KRDU','KMSY','KSMF','KSDF','KSJC','KSNA','KCVG','KIND','KTPA','KCLE','KOAK','KBNA','KHOU','KMCI','KSTL','KFLL','KMIA','KMEM','KBWI','KPDX','KSAN','KDCA','KIAD','KMCO','KMDW','KLGA','KSLC','KPHL','KPHL','KBOS','KCLT','KDTW','KEWR','KJFK','KSEA','KMSP','KIAH','KPHX','KSFO','KDEN','KDFW','KATL','KLAX','KORD']
-  indices = [0,10,20,30,35,40,45,50,52,54,56,58,60,61,62,63,64]
+  indices = [0,10,20,30,35,40,45,48,50,52,53,54,55,56,57,58,59,60,61,62,63,64]
+  curIndex = 0
   curSubmission = submission
-  writeSubmission = outsubmission
+  writeSubmission = ('%s%i.csv') % (outsubmissionbased,curIndex)
   for i in range(0, len(indices)-1):
     start = indices[i]
     end = indices[i+1]
     produceVectors(testFlights,curSubmission,vectorFileBase,airports[start:end],writeSubmission)
     curSubmission = writeSubmission
-    writeSubmission += 'n'
+    curIndex += 1
+    writeSubmission = ('%s%i.csv') % (outsubmissionbased,curIndex)
 
 def splitVectors(infile, baseoutfileNoExtension):
   f = open(infile)
@@ -115,7 +115,9 @@ def produceVectors(testFlights, submission, vectorFileBase, airports, outsubmiss
   for flight in flightList:
     airport = dictWithFlights[int(flight[0].strip().split(',')[0])]
     if airport in modelDict:
-      for ii in range(0,len(flight)-1):
+
+      altitudeList = []
+      for ii in range(0, len(flight)-1):
         curLine = flight[ii].strip().split(',')
         nextLine = flight[ii+1].strip().split(',')
         lat1,lon1 = (float(curLine[2]),float(curLine[3]))
@@ -124,10 +126,7 @@ def produceVectors(testFlights, submission, vectorFileBase, airports, outsubmiss
         model1,model2 = modelDict[airport]
         feature = [lat1,lon1,bearing]
         altitude = int(model1.predict(feature))
-        feature.append(altitude)
-        speed = int(model2.predict(feature))
-        newCurLine = '%s,%s,%f,%f,%i,%i\n' % (curLine[0], curLine[1], lat1, lon1, altitude, speed)
-        f.write(newCurLine)
+        altitudeList.append(altitude)
       curLine = flight[len(flight)-1].strip().split(',')
       lat1,lon1 = (float(curLine[2]),float(curLine[3]))
       lat2,lon2 = distance.airportToLatLon(airport)
@@ -135,10 +134,29 @@ def produceVectors(testFlights, submission, vectorFileBase, airports, outsubmiss
       model1,model2 = modelDict[airport]
       feature = [lat1,lon1,bearing]
       altitude = int(model1.predict(feature))
-      feature.append(altitude)
+      altitudeList.append(altitude)
+      smooth.naiveSmoothing(altitudeList)
+      for ii in range(0, len(flight)-1):
+        curLine = flight[ii].strip().split(',')
+        nextLine = flight[ii+1].strip().split(',')
+        lat1,lon1 = (float(curLine[2]),float(curLine[3]))
+        lat2,lon2 = (float(nextLine[2]),float(nextLine[3]))
+        bearing = mapPoints.calcBearing(lat1,lon1,lat2,lon2)
+        model1,model2 = modelDict[airport]
+        feature = [lat1,lon1,bearing,altitudeList[ii]]
+        speed = int(model2.predict(feature))
+        newCurLine = '%s,%s,%f,%f,%i,%i\n' % (curLine[0], curLine[1], lat1, lon1, altitudeList[ii], speed)
+        f.write(newCurLine)
+      curLine = flight[len(flight)-1].strip().split(',')
+      lat1,lon1 = (float(curLine[2]),float(curLine[3]))
+      lat2,lon2 = distance.airportToLatLon(airport)
+      bearing = mapPoints.calcBearing(lat1,lon1,lat2,lon2)
+      model1,model2 = modelDict[airport]
+      feature = [lat1,lon1,bearing,altitudeList[len(altitudeList)-1]]
       speed = int(model2.predict(feature))
-      newCurLine = '%s,%s,%f,%f,%i,%i\n' % (curLine[0], curLine[1], lat1, lon1, altitude, speed)
+      newCurLine = '%s,%s,%f,%f,%i,%i\n' % (curLine[0], curLine[1], lat1, lon1, altitudeList[len(altitudeList)-1], speed)
       f.write(newCurLine)
+
     else:
       for line in flight:
         f.write(line)

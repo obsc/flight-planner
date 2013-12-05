@@ -1,10 +1,10 @@
 import csv
 import greatcircle
 
-SPLITNUM = 50
+SPLITNUM = 32
 
 def load_paths():
-  f = csv.reader(open("dat/sampleSubmission.csv"))
+  f = csv.reader(open("dat/IMPORTANTHASHTAG.csv"))
   g = csv.reader(open("dat/TestFlights.csv"))
   f.next()
   g.next()
@@ -77,4 +77,4 @@ if __name__ == "__main__":
   paths = load_paths()
   expand_paths(paths, SPLITNUM)
   waypoints = paths_to_waypoints(paths)
-  write_file("dat/output.csv", waypoints)
+  write_file("dat/splitBase.csv", waypoints)
