@@ -87,10 +87,10 @@ def naiveSmoothing(altitudeList):
   for altitude in altitudeList:
     minAltitude = min(altitude,minAltitude)
     maxAltitude = max(altitude,maxAltitude)
-  hitMax = False
+  hitMax = True if maxAltitude == startAltitude else False
   lastAlt = altitudeList[0]
   for ii in range(1, len(altitudeList)):
-    if altitudeList[ii] == maxAltitude:
+    if altitudeList[ii] >= maxAltitude:
       hitMax = True
     else:
       if hitMax:
