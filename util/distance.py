@@ -5,7 +5,7 @@ import greatcircle
 airportDict = dict()
 
 def genAirportDict():
-  with open('AirportsLatLong.csv') as f:
+  with open('dat/AirportsLatLong.csv') as f:
     f.readline()
     for line in f:
       stuff = line.split(',')
