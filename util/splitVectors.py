@@ -8,11 +8,22 @@ import sklearn.tree as skt
 import sklearn.svm as svs
 
 def newModel():
-  #model = ske.ExtraTreesRegressor()
+  model = ske.ExtraTreesRegressor()
   #model = ske.GradientBoostingRegressor()
-  model = skn.KNeighborsRegressor(n_neighbors=5,weights='distance',algorithm='auto')
+  #model = skn.KNeighborsRegressor(n_neighbors=10,weights='distance',algorithm='auto')
   return model
 
+def vectorProduction(testFlights, submission, vectorFileBase, outsubmission):
+  airports = ['KPSP','KCID','KCOS','KFAT','KXNA','KLIT','KTUS','KDSM','KTUL','KPBI','KELP','KRSW','KLGB','KBUR','KOKC','KONT','KDAL','KABQ','KCMH','KMKE','KRDU','KMSY','KSMF','KSDF','KSJC','KSNA','KCVG','KIND','KTPA','KCLE','KOAK','KBNA','KHOU','KMCI','KSTL','KFLL','KMIA','KMEM','KBWI','KPDX','KSAN','KDCA','KIAD','KMCO','KMDW','KLGA','KSLC','KPHL','KPHL','KBOS','KCLT','KDTW','KEWR','KJFK','KSEA','KMSP','KIAH','KPHX','KSFO','KDEN','KDFW','KATL','KLAX','KORD']
+  indices = [0,10,20,30,35,40,45,50,52,54,56,58,60,61,62,63,64]
+  curSubmission = submission
+  writeSubmission = outsubmission
+  for i in range(0, len(indices)-1):
+    start = indices[i]
+    end = indices[i+1]
+    produceVectors(testFlights,curSubmission,vectorFileBase,airports[start:end],writeSubmission)
+    curSubmission = writeSubmission
+    writeSubmission += 'n'
 
 def splitVectors(infile, baseoutfileNoExtension):
   f = open(infile)
