@@ -1,7 +1,18 @@
 import mapPoints
 import sklearn.ensemble as ske
 import sklearn.neighbors as skn
-import Distance
+import distance
+import sim
+import sklearn.linear_model as skl
+import sklearn.tree as skt
+import sklearn.svm as svs
+
+def newModel():
+  #model = ske.ExtraTreesRegressor()
+  #model = ske.GradientBoostingRegressor()
+  model = skn.KNeighborsRegressor(n_neighbors=5,weights='distance',algorithm='auto')
+  return model
+
 
 def splitVectors(infile, baseoutfileNoExtension):
   f = open(infile)
@@ -81,10 +92,10 @@ def produceVectors(testFlights, submission, vectorFileBase, airports, outsubmiss
   for airport in airports:
     filename = '%s%s.csv'%(vectorFileBase,airport)
     features, targets = produceFeatures(filename)
-    model1 = skn.KNeighborsRegressor(n_neighbors = 3, weights='distance')
+    model1 = newModel()
     model1.fit(features,targets)
     afeatures, atargets = produceAugmentedFeatures(filename)
-    model2 = skn.KNeighborsRegressor(n_neighbors = 3, weights='distance')
+    model2 = newModel()
     model2.fit(afeatures,atargets)
     modelDict[airport] = (model1, model2)
 
@@ -108,7 +119,7 @@ def produceVectors(testFlights, submission, vectorFileBase, airports, outsubmiss
         f.write(newCurLine)
       curLine = flight[len(flight)-1].strip().split(',')
       lat1,lon1 = (float(curLine[2]),float(curLine[3]))
-      lat2,lon2 = Distance.airportToLatLon(airport)
+      lat2,lon2 = distance.airportToLatLon(airport)
       bearing = mapPoints.calcBearing(lat1,lon1,lat2,lon2)
       model1,model2 = modelDict[airport]
       feature = [lat1,lon1,bearing]
