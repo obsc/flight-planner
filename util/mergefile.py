@@ -12,7 +12,8 @@ def sorter(line):
 asdiposition = lambda x: int(x.split(',')[7])
 asdiflightplan = lambda x: int(x.split(',')[2])
 flighthistory = lambda x:int(x.split(',')[0])
-comp = asdiflightplan
+vectors = lambda x: hash(x.split(',')[8])
+comp = vectors
 timesMerged = [0]
 timesMergedUp = [0]
 

@@ -30,5 +30,5 @@ def getPaths(outfile):
             break
         print str(path_dist/opt_dist)
         path_dict[(id1,id2)] = path
+  f = open(outfile, 'w')
   pickle.dump(path_dict, outfile)
-
