@@ -21,34 +21,68 @@
 
 \begin{abstract}
 \end{abstract}
-
+\setlength{\columnsep}{1cm}
 \begin{multicols}{2}
 
 \section{Introduction}
-In the modern day, airplanes are a frequently-used means of transportation. However, using it is fairly expensive to manage due to costs of fuel and delay. Due to many different factors, such as weather, restricted areas, and jet streams, it’s very difficult to keep this cost of such transportation at an optimal level; airports are always looking for more ways to optimize their flights. What we aim to do here in Flight Quest is to optimize to the best of our ability the costs of airplane flights using machine learning techniques on large sets of data.
+In the modern day, airplanes are a frequently-used means of transportation. However, using it is fairly expensive to manage due to costs of fuel and delay. Due to many different factors, such as weather, restricted areas, and jet streams, it's very difficult to keep this cost of such transportation at an optimal level; airline companies are always looking for more ways to optimize their flights. What we aim to do here in Flight Quest is to optimize to the best of our ability the costs of airplane flights using machine learning techniques on large sets of data.
 
 \subsection{Task}
-Our task consists of using data obtained from previous flights to try and find optimal paths and conditions (e.g. speed, altitude) for new flights to take. However, since we don’t know exactly what features would be useful to train on, our data set contains many different attributes, making it very large and time-expensive to work with.
+Our task finding least-cost paths for new flights to take from their current location to get to their location. We are given that the following things factor into calculating the cost of a flight:
+	\begin{itemize}
+		\item Fuel consumption
+		\item Delay of flight arrival
+		\item Crossing into restricted areas
+		\item Changing the speed and altitude many times
+	\end{itemize}
+However, we are not given how much the factor in, and there are still more factors involved in the cost that aren't as clear-cut, such as turbulence and weather effects.\\
+
+In order to assist us in finding an optimal path, we have data from previous flights and other things such as airport and restricted area locations. However, the size of the data is very large (several gigabytes worth), meaning that we will have to be selective with what we use. Beyond this, there are no other guidelines to follow; we are free to approach the problem in any way necessary and use any resources that we need for our approach.
 
 \subsection{Motivation}
-Our motivation for undertaking this task came from searching for something that would challenge us to use what we learned in innovative ways, give us experience with working on a real-life machine learning problem, and have an impact on people’s lives. The Flight Quest problem satiates these desires by starting us off at the beginning, giving us a goal, and then telling us to go about solving this problem however we deem necessary
+Our motivation for undertaking this task came from searching for something that would challenge us to apply what we learned in innovative ways, give us experience with working on a real-life machine learning problem, and give us an opportunity to have an impact on people's lives. The Flight Quest problem satiates these desires by starting us off at the beginning, giving us a goal, and then telling us to go about solving this problem however we deem necessary. It presents to us a problem that we have never encountered; a problem that requires learning to create optimization instead of classification. Therefore, our attempts at solving this problem are more centered around finding ways to extend and evolve the machine learning techniques that we've been using for other learning tasks rather than simply reuse them.
 
 \section{Design and Approach}
+Since the goal is to create a path of least cost, our approach remains consistent in that we prioritize optimizing things that will have the biggest impact on the cost. However, since we don't know for sure all of the factors that go into calculating the cost nor how much each one is considered, we must also reorganize our plan based on assumptions made $\grave{a}$ $la$ a trial-and-error process.
+
 \subsection{Baseline}
-First, we created a baseline measure that took the most direct distance in between the current and destination points (via great circle calculation) and made that the desired path. Paths are problematic because of their complex structure so we needed a way to reduce down the data. 
+
+We used the simplest assumption for our baseline that since fuel was one of the considerations for calculating cost, so if we optimize the distance traveled (i.e. find the shortest-distance path), then we conserve fuel and as a result, lower our cost. However, since we are working with spherical coordinates instead of Euclidean coordinates, we must consider a different way of determining the shortest distance than what we are used to. For spherical coordinates, this distance is called the "great-circle" distance and is found by$^{1}$:\\
+
+	\begin{enumerate}
+		\item Finding the great circle on which the two points (current position and destination) lie.
+		\item Separating the great circle into two arcs via the two points. 
+		\item Taking the smaller of the two arcs.\\
+	\end{enumerate}
+
+Despite our assumptions, using this method to determine our answer incurred a cost that was significantly large (see table in section 3).
 
 \subsection{Restricted Zone Avoidance}
-Our next step was to identify and work out a path around restricted areas, since no flights are allowed through these. In order to account for this, we consider numerous points in between our current and destination locations and then attempt to construct a path going through points that don’t lie in restricted areas using an A* search.
 
-\subsection{Data Trimming}
+There were many reasons why our baseline did not produce the most optimal path, but the largest aspect we overlooked in our previous assumptions was the existence of restricted areas, which are locations on maps that passenger planes are not allowed to pass through i.e. passing through them would results in accumulating large amounts of cost. Therefore, we want to maintain the shortest path as we did with the baseline, but this time take into consideration the location of restricted areas.\\
+
+\subsubsection{kNN Modeling}
+
+If we assume that our flight examples finished with an optimal path, then one way to treat this problem is, for each test flight, to find the most similar flight path from history and follow what that flight did. In order to do this, we would need to first define a similarity measure for flights. Once we do that, we choose the first nearest neighbor flight path and follow that path. We did not consider using a larger value of $k$ due to the fact that taking the weighted average for flight paths would be suboptimal, as an average of paths could take us into a restricted area, among other things.
+
+\subsubsection{A* Path Construction}
+
+Another way to avoid restricted zones is to follow our own path. In order to do this, we took the following approach: we generate using a uniform distribution many "waypoints" that lie between the current and detination location geographically. Then, we utilize an A* search to find the shortest path from our current location to our destination location and avoid restricted zones by employing a distance function that sets the distance from any point to a point in a restricted zone to be very large.
+
 \subsection{Condition Optimization}
-Afterwards, we focused on finding optimal speeds, altitudes, and descent patterns for segments of our new generated flight path in order to find the best balance between fuel consumption and arrival time. In order to do this, we would need to first find the features that would be significant enough to train on and then train our data using a model. Another challenge would be finding out which learning algorithms would be appropriate.
+The distance that the path covers is only one factor for the cost; in order to have a complete flight plan, we must also include speeds and altitudes for each part of the flight plan. Both of these also affect the cost of our flight in many ways. For example, if the flight is on track to arrive on time, we don't want to unnecessarily expend fuel to get there faster. We also want our flight plans to be as consistent with these attributes as possible, since changing them multiple times incurs cost during the transitions. Keeping this in mind, we made several varying attempts in our approach. 
+
+\subsubsection{Data Trimming}
+
+Before we began using any machine learning models, we had to determine how we would first handle the data. As stated before, the data provided to us is very large and contains some unimportant information, so training on a model using all of it is time-expensive. We first identified the features that were given by the test flights, which were substantially fewer than those given by the training flights and then took those into consideration. Afterwards, from these trimmed down features, we used those that would best match the method we used. 
+
+\subsubsection{Ensemble Methods}
+\subsubsection{kNN Modeling}
+
+Similar to how we approached the restricted zones problem, we can model our test flight by comparing it to a previous training flight. 
 
 \section{Results}
-\subsection{Baseline}
-\subsection{Single Velocity}
-\subsection{kNN}
-\subsection{Ensemble Methods}
+Due to the fact that our problem was one of optimization, the only way for us to analyze how "correct" our solution was was to utilize a cost calculator, which would take in a set of completed test flights and return a score based on the total cost incurred across all of the test flights. The full results can be found in figure 1. 
 
 \section{Conclusion}
 
