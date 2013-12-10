@@ -1,0 +1,82 @@
+\documentclass{article}[12pt]
+\usepackage{lipsum}
+\usepackage{enumerate}
+\usepackage{multicol}
+%\usepackage{caption}
+%\usepackage{subcaption}
+\usepackage[margin=2.5cm]{geometry}
+
+\renewenvironment{abstract}
+  {\center
+  {\bfseries{\large\abstractname}}}
+  {\center}
+
+\begin{document}
+\title{Flight Quest: Flight Optimization}
+\author{
+	Alexander Guziel (asg252), Atheendra PT (ap778), Rene Zhang (rz99), Bo Yuan Zhou (bz88)
+}
+\date{}
+\maketitle
+
+\begin{abstract}
+\end{abstract}
+
+\begin{multicols}{2}
+
+\section{Introduction}
+In the modern day, airplanes are a frequently-used means of transportation. However, using it is fairly expensive to manage due to costs of fuel and delay. Due to many different factors, such as weather, restricted areas, and jet streams, it’s very difficult to keep this cost of such transportation at an optimal level; airports are always looking for more ways to optimize their flights. What we aim to do here in Flight Quest is to optimize to the best of our ability the costs of airplane flights using machine learning techniques on large sets of data.
+
+\subsection{Task}
+Our task consists of using data obtained from previous flights to try and find optimal paths and conditions (e.g. speed, altitude) for new flights to take. However, since we don’t know exactly what features would be useful to train on, our data set contains many different attributes, making it very large and time-expensive to work with.
+
+\subsection{Motivation}
+Our motivation for undertaking this task came from searching for something that would challenge us to use what we learned in innovative ways, give us experience with working on a real-life machine learning problem, and have an impact on people’s lives. The Flight Quest problem satiates these desires by starting us off at the beginning, giving us a goal, and then telling us to go about solving this problem however we deem necessary
+
+\section{Design and Approach}
+\subsection{Baseline}
+First, we created a baseline measure that took the most direct distance in between the current and destination points (via great circle calculation) and made that the desired path. Paths are problematic because of their complex structure so we needed a way to reduce down the data. 
+
+\subsection{Restricted Zone Avoidance}
+Our next step was to identify and work out a path around restricted areas, since no flights are allowed through these. In order to account for this, we consider numerous points in between our current and destination locations and then attempt to construct a path going through points that don’t lie in restricted areas using an A* search.
+
+\subsection{Data Trimming}
+\subsection{Condition Optimization}
+Afterwards, we focused on finding optimal speeds, altitudes, and descent patterns for segments of our new generated flight path in order to find the best balance between fuel consumption and arrival time. In order to do this, we would need to first find the features that would be significant enough to train on and then train our data using a model. Another challenge would be finding out which learning algorithms would be appropriate.
+
+\section{Results}
+\subsection{Baseline}
+\subsection{Single Velocity}
+\subsection{kNN}
+\subsection{Ensemble Methods}
+
+\section{Conclusion}
+
+\section{References}
+%\begin{table}[t]
+%\centering
+%\fontsize{8}{10}\selectfont
+%\begin{tabular}{|c | c | c |}
+%\hline
+%\bf{Index} & \bf{Description} & \bf{Non-Speech Body Sound}\\ \hline \hline
+%1 & Eat a crunchy cookie & Eating crispy dry\\ \hline
+%2 & Eat an apple & Eating crispy wet\\ \hline
+%3 & Eat a piece of bread & Eating soft dry\\ \hline
+%4 & Eat a banana & Eating soft wet\\ \hline
+%5 & Drink water & Drinking\\ \hline
+%6 & Deeply breath & Deep Breathing\\ \hline
+%7 & Clear your throat & Clearing Throat\\ \hline
+%8 & Cough & Coughing\\ \hline
+%9 & Sniffle & Sniffling\\ \hline
+%10 & Laugh aloud & Laugh\\ \hline
+%%13 & Scratch face & Face scratching\\ \hline \hline
+%\bf{Index} & \bf{Description} & \bf{Other Sounds}\\ \hline \hline
+%11 & Take a moment to relax & Silence\\ \hline
+%%12 & Whisper your name & Whisper\\ \hline
+%12 & Speech & Speech\\ \hline
+%\end{tabular}
+%\caption{The list of non-speech body sounds and other sounds considered in this work}
+%\label{tab:dataCollectProt}
+%\end{table}
+\end{multicols}
+\end{document}
