@@ -1,14 +1,11 @@
 \documentclass{article}[12pt]
 \usepackage{lipsum}
 \usepackage{enumerate}
-\usepackage{multicol}
+\usepackage{multicol,caption}
 \usepackage{url}
+\usepackage{graphicx}
+\usepackage{wrapfig}
 \usepackage[margin=2.5cm]{geometry}
-
-\renewenvironment{abstract}
-  {\center
-  {\bfseries{\large\abstractname}}}
-  {\center}
 
 \begin{document}
 \title{Flight Quest: Flight Optimization, Paper 36}
@@ -18,8 +15,6 @@
 \date{}
 \maketitle
 
-\begin{abstract}
-\end{abstract}
 \setlength{\columnsep}{1cm}
 \begin{multicols}{2}
 
@@ -60,6 +55,12 @@ There were many reasons why our baseline did not produce the most optimal path, 
 We also tried out publicly released code by a competition administrator which attempting to avoid restricted zones by pushing the path away from the centroid of the restricted zone, but this was flawed.
 
 Another way to avoid restricted zones is to follow our own path. In order to do this, we took the following approach: we generate using a uniform distribution many "waypoints" that lie between the current and detination location geographically. By producing a fine enough grid, we should have a very good approximation of the shortest path. Then, we utilize an A* search to find the shortest path from our current location to our destination location and avoid restricted zones by employing a distance function that sets the distance from any point to a point in a restricted zone to be very large.
+\begingroup
+  \captionof{figure}{Visualization of A* search.}
+  \begin{center}
+    \includegraphics[width=1.5in]{astar.png}
+	\end{center}
+\endgroup
 
 \subsubsection{Condition Optimization}
 The distance that the path covers is only one factor for the cost; in order to have a complete flight plan, we must also include speeds and altitudes for each part of the flight plan. Both of these also affect the cost of our flight in many ways. For example, if the flight is on track to arrive on time, we don't want to unnecessarily expend fuel to get there faster. We also want our flight plans to be as consistent with these attributes as possible, since changing them multiple times incurs cost during the transitions. Keeping this in mind, we made several varying attempts in our approach. (I'm not sure this belongs here)
@@ -100,11 +101,39 @@ We used the simplest assumption for our baseline that since fuel was one of the 
 		\item Taking the smaller of the two arcs.\\
 	\end{enumerate}
 
-Despite our assumptions, using this method to determine our answer incurred a cost that was significantly large (see table in section 3).
+Despite our assumptions, using this method to determine our answer incurred a cost that was significantly large.
 
+\begingroup
+  \captionof{figure}{Visualization of baseline approach.}
+  \begin{center}
+    \includegraphics[width=1.5in]{baseline.png}
+	\end{center}
+\endgroup
 
 \subsection{Results}
-Due to the fact that our problem was one of optimization, the only way for us to analyze how "correct" our solution was was to utilize a cost calculator, which would take in a set of completed test flights and return a score based on the total cost incurred across all of the test flights. The full results can be found in figure 1. 
+Due to the fact that our problem was one of optimization, the only way for us to analyze how "correct" our solution was was to utilize a cost calculator, which would take in a set of completed test flights and return a score based on the total cost incurred across all of the test flights. The full results can be found below:\\
+
+\begingroup
+\noindent
+\begin{tabular}{ | l | l | }
+    \hline
+    Method & Index \\ \hline
+    Gradient boosted A* (single velocity) & 1\\ \hline
+		RandomForest A*(single velocity) & 2 \\ \hline
+		Unsmoothed Gradient Boost A* & 3 \\ \hline
+		Unsmoothed kNN A* & 4 \\ \hline
+		Smoothed weighted KNN A* & 5 \\ \hline
+		Smoothed Forest of Random Trees A* & 6 \\ \hline
+		Gradient boosted centroid avoider & 7\\ \hline
+		Baseline & 8 \\ \hline
+\end{tabular}
+\begin{center}
+    \includegraphics[width=3in]{results.png}
+	\end{center}
+\captionof{figure}{Our cost values for the methods we tried.}
+\endgroup
+
+
 \subsection{Discussion}
 In general, the algorithms seem to produce reasonable paths. Some of the paths seem to be sensitive to outliers, though.
 \section{Related Work}
