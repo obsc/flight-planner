@@ -76,22 +76,25 @@ For many flights, we made the assumption that for a certain distance of flight, 
 \subsubsection{Ensemble Methods}
 We used destination, distance until destination, and time until arrival as features here. Our thought was that optimal cruise altitude and speed would be based off the distance length of a flight because going to high altitudes would be less efficient for shorter flights because of the cost of fuel. Destination seems relevant because flights going to the same destination usually follow similar paths. Time until arrival is also a useful feature because it is correlated with speed and altitude since a late flight will want to get there faster.
 \\
+
 An advantage of ensemble methods is that they have low variance. In this way, outliers are unlikely which stops the flight taking odd paths. In addition, ensemble methods don't depend on a similarity measure and in general, we have found them to produce pretty consistent results without too much information about the features because most use averaging amongst decision trees.\\
-We used random forests and gradient boosting. Random forests trains an ensemble of decision trees. The standard random forest uses a random subset for splitting criteria while the extremely random trees method uses a different random subset to evaluate the splitting criteria each time. Gradient boosting trains an ensemble of random trees and uses a loss function to optimize the weights. 
-(mention which scikit learn things they are)\\
 
-
-
-
-
+We used random forests and gradient boosting. Random forests trains an ensemble of decision trees. The standard random forest uses a random subset for splitting criteria while the extremely random trees method uses a different random subset to evaluate the splitting criteria each time \cite{randomforest}. Gradient boosting trains an ensemble of random trees and uses a loss function to optimize the weights \cite{gradientboost}. 
+\textbf{(mention which scikit learn things they are)}
 
 \subsubsection{Point by Point Classification}
 
+When we create our flight paths, we expect it to be segmentable into several parts based on the waypoints we expected the path to pass through. Therefore, another approach is rather than assume a single optimal speed and altitude for the flight, we can find the optimal speed and altitudes at each of these points for the flight. While this allows us to micromanage our flights more, we must also keep in mind that doing this will result in greater costs due to the fact that frequently changing these attributes incur cost during transitions.
+
 \subsubsection{Ensemble Methods}
+
+Similar to how we utilized ensemble methods before, we can use then here since the problem has effectively downscaled in size from a full path to points on a path. However, for this same reason, we cannot use the same features as before. Now, instead of using destination, distance until destination, and time until arrival, which were more oriented to give details of a full path, we will use the position of the waypoint, the direction that the flight is proceeding, and the distance from the destination. These features allow us to provide more details indicative of a point on a path while also giving an idea of how our overall path uses that point (i.e. identify it as a turning point, descent point, etc.).
+
 \subsubsection{K Nearest Neighbors}
 
-If we assume that our flight examples finished with an optimal path, then one way to treat this problem is, for each test flight, to find the most similar flight path from history and follow what that flight did. In order to do this, we would need to first define a similarity measure for flights. 
-Similar to how we approached the restricted zones problem, we can model our test flight by comparing it to a previous training flight. We simplified the problem to classify a series of points along the approximate shortest route that avoided restricted zones. From here, we classified the altitude based on latitude, longitude, and initial bearing (direction). The intuition by creating bearing as a feature was that flights flying in different directions face different winds and thus have different efficiencies. We then used position, bearing, and altitude to determine the speed. We determined that speed mostly depended on altitude. To run this, we used SciKit-Learn's neighbors.nearestNeighborsRegression() model which uses Minkowski distance metric with $p=2$ and uses a ball-tree implementation to speed up search through a large space. We also split up the data by airport so that points would only be classified against flights going to the same airport to avoid issues with flights with low altitudes when passing by an airport.
+If we assume that our flight examples finished with an optimal path, then similar to how we approached the restricted zones problem, we can model our test flight by comparing it to a previous training flight. We simplified the problem to classify a series of points along the approximate shortest route that avoided restricted zones. From here, we classified the altitude based on latitude, longitude, and initial bearing (direction).\\
+
+The intuition by creating bearing as a feature was that flights flying in different directions face different winds and thus have different efficiencies. We then used position, bearing, and altitude to determine the speed. We determined that speed mostly depended on altitude. To run this, we used SciKit-Learn's neighbors.nearestNeighborsRegression() model which uses Minkowski distance metric with $p=2$ and uses a ball-tree implementation to speed up search through a large space \cite{scikit}. We also split up the data by airport so that points would only be classified against flights going to the same airport to avoid issues with flights with low altitudes when passing by an airport.
 
 \section{Evaluation}
 \subsection{Methodology}
@@ -107,7 +110,7 @@ We used the simplest assumption for our baseline that since fuel was one of the 
 		\item Taking the smaller of the two arcs.\\
 	\end{enumerate}
 
-Despite our assumptions, using this method to determine our answer incurred a cost that was significantly large.
+Despite our assumptions, using this method to determine our answer incurred a cost that was significantly large. This is due to the fact that straight-line paths are susceptible to cross through restricted zones, as shown below.
 
 \begingroup
   \captionof{figure}{Visualization of baseline approach.}
@@ -117,7 +120,7 @@ Despite our assumptions, using this method to determine our answer incurred a co
 \endgroup
 
 \subsection{Results}
-Due to the fact that our problem was one of optimization, the only way for us to analyze how "correct" our solution was was to utilize a cost calculator, which would take in a set of completed test flights and return a score based on the total cost incurred across all of the test flights. The full results can be found below:\\
+Due to the fact that our problem was one of optimization, the only way for us to analyze how "correct" our solution was was to utilize a cost calculator, which would take in a set of completed test flights and return a score based on the total cost incurred across all of the test flights. The full results can be found below, as well as how long the computations took for each method: \\
 
 \begingroup
 \noindent
@@ -135,13 +138,14 @@ Due to the fact that our problem was one of optimization, the only way for us to
 \end{tabular}
 \begin{center}
     \includegraphics[width=3in]{results.png}
+		\includegraphics[width=3in]{time.png}
 	\end{center}
 \captionof{figure}{Our cost values for the methods we tried.}
 \endgroup
 
-
 \subsection{Discussion}
-In general, the algorithms seem to produce reasonable paths. Some of the paths seem to be sensitive to outliers, though.
+In general, the algorithms seem to produce reasonable paths. Some of the paths seem to be sensitive to outliers, though, resulting in suboptimal paths. Many of the methods we used produced comparable costs, so it's not unreasonable to think that, with better tuning, that some of them could turn out to be a reliable solution. However, as we can see from the time it takes to compute each method, undergoing the process for some methods will be drastically more time-expensive than doing the same for others. It's also worth noting that the two best methods we've tried so far: gradient boosted A* and random forest A*, both have a relatively short computation time of 6 hours, meaning that doing computations in a greater amount of detail does not necessarily give us a better solution.  
+
 \section{Related Work}
 We were not able to find any academic literature on this. We were able to peruse the forums for this competition and milestone version of it. Top-ranked submissions for the milestone used the data to train for optimal cruise speed and altitude. They also trained for optimal descent. Some used a cost-based model. The milestone competition winner used a cost based model which considered only the features that could reduce fuel burn. 
 
@@ -157,14 +161,15 @@ In the end, we were able to get some improvement compared to the baseline mode, 
 \begin{thebibliography}{1}
 
 \bibitem{kaggle} "Description-Flight Quest 2: Flight Optimization | GE Quest". \url{http://www.gequest.com/c/flight2-main}.
-
-%\bibitem{hamner} 
 \bibitem{forum} "Flight Quest 2: Flight Optimization Forum | GE Quest". \url{https://www.gequest.com/c/flight2-milestone/forums}.
-
 \bibitem{wiki} "Great-circle Distance". \url{http://en.wikipedia.org/wiki/Great-circle_distance}.
-
 \bibitem{scikit} "scikit-learn: machine learning in Python". \url{http://scikit-learn.org/stable/}.
-
+\bibitem{geopy} "geopy-A Geocoding Toolbox for Python". \url{https://code.google.com/p/geopy/}.
+\bibitem{pandas} "Python Data Analysis Library". \url{http://pandas.pydata.org/}.
+\bibitem{shapely} "Shapely 1.2.18: Python Package Index". \url{https://pypi.python.org/pypi/Shapely}.
+\bibitem{randomforest} "Random Forest". \url{http://en.wikipedia.org/wiki/Random_forest}.
+\bibitem{gradientboost} "Gradient Boosting". \url{http://en.wikipedia.org/wiki/Gradient_boosting}.
+\bibitem{hamner} "GE Flight Quest 2 Basic Agents". \url{https://github.com/benhamner/GEFlight2BasicAgents}.
 \end{thebibliography}
 \end{multicols}
 \end{document}
