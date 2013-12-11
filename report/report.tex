@@ -63,7 +63,7 @@ Another way to avoid restricted zones is to follow our own path. In order to do 
 \endgroup
 
 \subsubsection{Condition Optimization}
-The distance that the path covers is only one factor for the cost; in order to have a complete flight plan, we must also include speeds and altitudes for each part of the flight plan. Both of these also affect the cost of our flight in many ways. For example, if the flight is on track to arrive on time, we don't want to unnecessarily expend fuel to get there faster. We also want our flight plans to be as consistent with these attributes as possible, since changing them multiple times incurs cost during the transitions. Keeping this in mind, we made several varying attempts in our approach. (I'm not sure this belongs here)
+The distance that the path covers is only one factor for the cost; in order to have a complete flight plan, we must also include speeds and altitudes for each part of the flight plan. Both of these also affect the cost of our flight in many ways. For example, if the flight is on track to arrive on time, we don't want to unnecessarily expend fuel to get there faster. We also want our flight plans to be as consistent with these attributes as possible, since changing them multiple times incurs cost during the transitions. Keeping this in mind, we made several varying attempts in our approach. 
 
 \subsubsection{Data Trimming and Feature Selection}
 
@@ -71,21 +71,27 @@ Before we began using any machine learning models, we had to determine how we wo
 
 
 \subsubsection{Whole Flight Classification}
-For many flights, we made the assumption that for a certain distance of flight, there is an optimal speed and altitude to cruise at at which the airplane will follow for the majority of the route which excludes descent and ascent. 
-\subsubsection{kNN Modeling}
-
-If we assume that our flight examples finished with an optimal path, then one way to treat this problem is, for each test flight, to find the most similar flight path from history and follow what that flight did. In order to do this, we would need to first define a similarity measure for flights. Once we do that, we choose the first nearest neighbor flight path and follow that path. We did not consider using a larger value of $k$ due to the fact that taking the weighted average for flight paths would be suboptimal, as an average of paths could take us into a restricted area, among other things.
-
-
-\subsection{Point by Point Classification}
-
-
-
+For many flights, we made the assumption that for a certain distance of flight, there is an optimal speed and altitude to cruise at at which the airplane will follow for the majority of the route which excludes descent and ascent because the test flights file is always given for flights that have already taken off. For descent, we used a fixed distance and altitude.
 
 \subsubsection{Ensemble Methods}
-\subsubsection{kNN Modeling}
+We used destination, distance until destination, and time until arrival as features here. Our thought was that optimal cruise altitude and speed would be based off the distance length of a flight because going to high altitudes would be less efficient for shorter flights because of the cost of fuel. Destination seems relevant because flights going to the same destination usually follow similar paths. Time until arrival is also a useful feature because it is correlated with speed and altitude since a late flight will want to get there faster.
+\\
+An advantage of ensemble methods is that they have low variance. In this way, outliers are unlikely which stops the flight taking odd paths. In addition, ensemble methods don't depend on a similarity measure and in general, we have found them to produce pretty consistent results without too much information about the features because most use averaging amongst decision trees.\\
+We used random forests and gradient boosting. Random forests trains an ensemble of decision trees. The standard random forest uses a random subset for splitting criteria while the extremely random trees method uses a different random subset to evaluate the splitting criteria each time. Gradient boosting trains an ensemble of random trees and uses a loss function to optimize the weights. 
+(mention which scikit learn things they are)\\
 
-Similar to how we approached the restricted zones problem, we can model our test flight by comparing it to a previous training flight. 
+
+
+
+
+
+\subsubsection{Point by Point Classification}
+
+\subsubsection{Ensemble Methods}
+\subsubsection{K Nearest Neighbors}
+
+If we assume that our flight examples finished with an optimal path, then one way to treat this problem is, for each test flight, to find the most similar flight path from history and follow what that flight did. In order to do this, we would need to first define a similarity measure for flights. 
+Similar to how we approached the restricted zones problem, we can model our test flight by comparing it to a previous training flight. We simplified the problem to classify a series of points along the approximate shortest route that avoided restricted zones. From here, we classified the altitude based on latitude, longitude, and initial bearing (direction). The intuition by creating bearing as a feature was that flights flying in different directions face different winds and thus have different efficiencies. We then used position, bearing, and altitude to determine the speed. We determined that speed mostly depended on altitude. To run this, we used SciKit-Learn's neighbors.nearestNeighborsRegression() model which uses Minkowski distance metric with $p=2$ and uses a ball-tree implementation to speed up search through a large space. We also split up the data by airport so that points would only be classified against flights going to the same airport to avoid issues with flights with low altitudes when passing by an airport.
 
 \section{Evaluation}
 \subsection{Methodology}
@@ -147,7 +153,7 @@ Another issue is the presence of outliers in our data classification. Inspecting
 \section{Conclusion}
 In the end, we were able to get some improvement compared to the baseline mode, but we are still far off from the leaders of the competition. We have illustrated that machine learning can be used to some extent to plan flight routes, but perhaps some optimization techniques are needed as well. Feature selection is difficult and large datasets are hard to work with because of not only dealing with the data, but because of runtime issues, our choices for learning algorithms are limited. We tried Support Vector Regression, but the runtime was completely unreasonable even on a small subset. Our results show that machine learning can be applicable to optimization.
 
-\section{References}
+
 \begin{thebibliography}{1}
 
 \bibitem{kaggle} "Description-Flight Quest 2: Flight Optimization | GE Quest". \url{http://www.gequest.com/c/flight2-main}.
