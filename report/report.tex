@@ -49,13 +49,17 @@ This problem is important because in this age big data can be seemingly used to 
 The competition is scored by submission onto a website. On their end, they run a simulator with weather data and ground conditions data which uses a physical model to simulate fuel burn using factors such as windspeed and distance traveled. Because of the nature of this, techniques such as cross validation tend to not work and overfitting is less of a concern because of the large hypothesis space and because the competition is scored with a random $57\%$ subset of the data used to calculate the leaderboard.
 \subsection{Algorithms and Methods}
 
-The basic goal in this case should be to create a series of points and classify them with altitude and speed for each aircraft. Our principal assumption is that the great-circle path should be the shortest, provided we avoid restricted zones which incur the same cost as the flight not reaching the destination. We see k-nearest neighbors as a very natural solution as well as ensemble methods due to their robustness.
+The basic goal in this case should be to create a series of points and classify them with altitude and speed for each aircraft. Our principal assumption is that the great-circle path should be the shortest, provided we avoid restricted zones which incur the same cost as the flight not reaching the destination. We see k-nearest neighbors as a very natural solution as well as ensemble methods due to their robustness.\\
+
+We used Python 2.7 due to number of machine learning libraries and ease of scripting for splitting up data. We used SciKit Learn for most of our learning algorithms as well as GeoPy and Shapely for geometry related to the Earth. We also used Pandas to read in CSV files. We also used a chunk of code uploaded by a competition administrator on GitHub. We ran all our tests on Windows 7 x64.
 
 \subsubsection{Restricted Zone Avoidance}
 
 There were many reasons why our baseline did not produce the most optimal path, but the largest aspect we overlooked in our previous assumptions was the existence of restricted areas, which are locations on maps that passenger planes are not allowed to pass through i.e. passing through them would results in accumulating large amounts of cost. Therefore, we want to maintain the shortest path as we did with the baseline, but this time take into consideration the location of restricted areas.\\
 
-Another way to avoid restricted zones is to follow our own path. In order to do this, we took the following approach: we generate using a uniform distribution many "waypoints" that lie between the current and detination location geographically. Then, we utilize an A* search to find the shortest path from our current location to our destination location and avoid restricted zones by employing a distance function that sets the distance from any point to a point in a restricted zone to be very large.
+We also tried out publicly released code by a competition administrator which attempting to avoid restricted zones by pushing the path away from the centroid of the restricted zone, but this was flawed.
+
+Another way to avoid restricted zones is to follow our own path. In order to do this, we took the following approach: we generate using a uniform distribution many "waypoints" that lie between the current and detination location geographically. By producing a fine enough grid, we should have a very good approximation of the shortest path. Then, we utilize an A* search to find the shortest path from our current location to our destination location and avoid restricted zones by employing a distance function that sets the distance from any point to a point in a restricted zone to be very large.
 
 \subsubsection{Condition Optimization}
 The distance that the path covers is only one factor for the cost; in order to have a complete flight plan, we must also include speeds and altitudes for each part of the flight plan. Both of these also affect the cost of our flight in many ways. For example, if the flight is on track to arrive on time, we don't want to unnecessarily expend fuel to get there faster. We also want our flight plans to be as consistent with these attributes as possible, since changing them multiple times incurs cost during the transitions. Keeping this in mind, we made several varying attempts in our approach. (I'm not sure this belongs here)
@@ -102,6 +106,7 @@ Despite our assumptions, using this method to determine our answer incurred a co
 \subsection{Results}
 Due to the fact that our problem was one of optimization, the only way for us to analyze how "correct" our solution was was to utilize a cost calculator, which would take in a set of completed test flights and return a score based on the total cost incurred across all of the test flights. The full results can be found in figure 1. 
 \subsection{Discussion}
+In general, the algorithms seem to produce reasonable paths. Some of the paths seem to be sensitive to outliers, though.
 \section{Related Work}
 We were not able to find any academic literature on this. We were able to peruse the forums for this competition and milestone version of it. Top-ranked submissions for the milestone used the data to train for optimal cruise speed and altitude. They also trained for optimal descent. Some used a cost-based model. The milestone competition winner used a cost based model which considered only the features that could reduce fuel burn. 
 
@@ -111,6 +116,7 @@ While we have done work and seen improvements, a lot can be done. It is likely t
 Another issue is the presence of outliers in our data classification. Inspecting our paths, most paths seem very reasonable but sometimes outliers are present in the data where a plane goes from 36000 feet altitude to 8000 feet to 36000 feet in two steps. Detecting changes like this aren't quite that simple. It may be possible to train these using some type of Markov model where the probability of different percentage based or absolute altitude changes are calculated and we tweak the confidence that this is a mistake to smooth the data. Then, the middle point could be the arithmetic or geometric mean of the two points' altitudes.
 
 \section{Conclusion}
+In the end, we were able to get some improvement compared to the baseline mode, but we are still far off from the leaders of the competition. We have illustrated that machine learning can be used to some extent to plan flight routes, but perhaps some optimization techniques are needed as well. Feature selection is difficult and large datasets are hard to work with because of not only dealing with the data, but because of runtime issues, our choices for learning algorithms are limited. We tried Support Vector Regression, but the runtime was completely unreasonable even on a small subset. Our results show that machine learning can be applicable to optimization.
 
 \section{References}
 \begin{thebibliography}{1}
