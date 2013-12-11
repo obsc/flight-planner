@@ -13,7 +13,7 @@
 \begin{document}
 \title{Flight Quest: Flight Optimization, Paper 36}
 \author{
-	Alexander Guziel (asg252), Atheendra PT (ap778), Rene Zhang (rz99), Bo Yuan Zhou (bz88)
+	Group of 4
 }
 \date{}
 \maketitle
@@ -39,15 +39,14 @@ Our task finding least-cost paths for new flights to take from their current loc
 		\item Crossing into restricted areas
 		\item Changing the speed and altitude many times
 	\end{itemize}
-However, we are not given how much the factor in, and there are still more factors involved in the cost that aren't as clear-cut, such as turbulence and weather effects.\\
+However, we are not given how much the factor in, and there are still more factors involved in the cost that aren't as clear-cut, such as turbulence and weather effects. The cost model is based on relative cost in dollars that tries to measure the direct and indirect costs of flights. Our goal is to construct a series of points (latitude and longitude) with airspeed and altitude labeled which correspond to the flight route.\\
 
 In order to assist us in finding an optimal path, we have data from previous flights and other things such as airport and restricted area locations. However, the size of the data is very large (several gigabytes worth), meaning that we will have to be selective with what we use. Beyond this, there are no other guidelines to follow; we are free to approach the problem in any way necessary and use any resources that we need for our approach.\\
-This problem is important because in this age big data can be seemingly used to optimize a processes so it is worth asking whether it can help airlines. This problem is interesting because we wonder whether an agent can indeed help pilots know which routes to follow.
+Each data release covers a certain time period. The data provides all information about flights: destination airport, arrival airport, scheduled and actual departure and arrival points, positions transmitted by the aircraft during flight, flight schedules and changes to said schedules. Also provided is weather conditions like runway conditions and sky conditions. \\
+The test data is similar, but all are information is cut off after a certain time period. The collection of test flights is a list of flight IDs corresponding to flights in the test set along with current position, speed, altitude as well as certain delay costs and fuel costs. All test flights start above $18,000$ feet and are at least 75 miles away from the destination airport. They are all medium range aircraft. Flights are optimized independently so instructions for a flight are only used to simulate the cost of that one flight. \\
+This problem is important because in this age big data can be seemingly used to optimize a processes so it is worth asking whether it can help airlines. This problem is interesting because we wonder whether an agent can indeed help pilots know which routes to follow. Structured output usually does not have set algorithms so we would need to do something somewhat unique. Another part of the task is selecting and possibly creating features. 
 
-The basic idea is given the flight with the following parameters (add later), that we construct a list of 'waypoints' which are points the aircraft flies to consisting of latitude, longitude, and altitude. We also specify what speed the aircraft should travel at at that point.
-(let's list all the data we have here)
-
-The competition is scored by submission onto a website. On their end, they run a simulator with weather data and ground conditions data which uses a physical model to simulate fuel burn using factors such as windspeed and distance traveled. Because of the nature of this, techniques such as cross validation tend to not work and overfitting is less of a concern because of the large hypothesis space. It is also difficult to make generalizations about the generalization error because our "error" in this case is deviation from the optimal cost, which is unknown.
+The competition is scored by submission onto a website. On their end, they run a simulator with weather data and ground conditions data which uses a physical model to simulate fuel burn using factors such as windspeed and distance traveled. Because of the nature of this, techniques such as cross validation tend to not work and overfitting is less of a concern because of the large hypothesis space and because the competition is scored with a random $57\%$ subset of the data used to calculate the leaderboard.
 \subsection{Algorithms and Methods}
 
 The basic goal in this case should be to create a series of points and classify them with altitude and speed for each aircraft. Our principal assumption is that the great-circle path should be the shortest, provided we avoid restricted zones which incur the same cost as the flight not reaching the destination. We see k-nearest neighbors as a very natural solution as well as ensemble methods due to their robustness.
