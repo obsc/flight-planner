@@ -138,17 +138,22 @@ Due to the fact that our problem was one of optimization, the only way for us to
 \end{tabular}
 \begin{center}
     \includegraphics[width=3in]{results.png}
-		\includegraphics[width=3in]{time.png}
 	\end{center}
 \captionof{figure}{Our cost values for the methods we tried.}
+\begin{center}
+    \includegraphics[width=3in]{time.png}
+	\end{center}
 \captionof{figure}{Time for training and classification of the test set, in hours}
 \endgroup
 
 \subsection{Discussion}
-In general, the algorithms seem to produce reasonable paths. Some of the paths seem to be sensitive to outliers, though, resulting in suboptimal paths. The smoothing refers to a method to stop drastic altitude changes which puts the flight into two modes: ascent and descent. We change modes at the pinnacle altitude of the flight. If in ascent mode, the altitude decreases, we simply repeat the same altitude and likewise for descent mode. The problem is our naive smoothing algorithm is sensitive to outliers, so this sensitivity ends up leaving us with a higher cost rather than lowering. Ultimately, our naive smoothing algorithm creates more penalties in this way than the penalty for too many altitude changes. Many of the methods we used produced comparable costs, so it's not unreasonable to think that, with better tuning, that some of them could turn out to be a reliable solution. However, as we can see from the time it takes to compute each method, undergoing the process for some methods will be drastically more time-expensive than doing the same for others. It's also worth noting that the two best methods we've tried so far, gradient boosted A* and random forest A* for an optimal cruise speed and altitude, both have a relatively short computation time of 6 hours, meaning that doing computations in a greater amount of detail does not necessarily give us a better solution.  
+In general, the algorithms seem to produce reasonable paths. Some of the paths seem to be sensitive to outliers, though, resulting in suboptimal paths. The smoothing refers to a method to stop drastic altitude changes which puts the flight into two modes: ascent and descent. We change modes at the pinnacle altitude of the flight. If in ascent mode, the altitude decreases, we simply repeat the same altitude and likewise for descent mode. The problem is our naive smoothing algorithm is sensitive to outliers, so this sensitivity ends up leaving us with a higher cost rather than lowering. Ultimately, our naive smoothing algorithm creates more penalties in this way than the penalty for too many altitude changes. \\
+
+Many of the methods we used produced comparable costs, so it's not unreasonable to think that, with better tuning, that some of them could turn out to be a reliable solution. However, as we can see from the time it takes to compute each method, undergoing the process for some methods will be drastically more time-expensive than doing the same for others. It's also worth noting that the two best methods we've tried so far, gradient boosted A* and random forest A* for an optimal cruise speed and altitude, both have a relatively short computation time of 6 hours, meaning that doing computations in a greater amount of detail does not necessarily give us a better solution.  
 
 \section{Related Work}
 We were not able to find any academic literature on this. We were able to peruse the forums for this competition and milestone version of it$^{\cite{forum}}$. Top-ranked submissions for the milestone used the data to train for optimal cruise speed and altitude. They also trained for optimal descent. Some used a cost-based model. The milestone competition winner used a cost based model which considered only the features that could reduce fuel burn and total time in air. It did not consider delay costs and other costs because they were deemed insignificant in the cost in comparison. \\
+
 For structured prediction in general, most literature had methods based on the type of prediction which was irrelevant to this problem.
 
 \section{Future Work}

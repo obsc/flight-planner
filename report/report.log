@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.16)  11 DEC 2013 18:10
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9) (preloaded format=pdflatex 2012.10.16)  11 DEC 2013 23:55
 entering extended mode
 **report.tex
 (C:\Users\Bobby\Documents\GitHub\flight-planner\report\report.tex
@@ -244,121 +244,162 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <6> on input line 16.
 
-Underfull \hbox (badness 10000) in paragraph at lines 27--27
+Underfull \hbox (badness 10000) in paragraph at lines 22--23
+
+ []
+
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 24.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 24.
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--25
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 28--28
 []\OT1/cmr/bx/n/14.4 Problem Def-i-ni-tion and
  []
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 32.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 33.
 ("C:\Program Files (x86)\MiKTeX 2.9\tex\latex\base\omscmr.fd"
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 32.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 33.
 
-Underfull \hbox (badness 10000) in paragraph at lines 37--38
+Underfull \hbox (badness 10000) in paragraph at lines 38--39
 
  []
 
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <7> on input line 41.
-LaTeX Font Info:    External font `cmex10' loaded for size
-(Font)              <5> on input line 41.
+
+Underfull \hbox (badness 10000) in paragraph at lines 40--41
+
+ []
+
 [1
 
 {C:/Users/Bobby/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 47--48
+Underfull \hbox (badness 10000) in paragraph at lines 42--43
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 53--54
+Underfull \hbox (badness 10000) in paragraph at lines 44--45
 
  []
 
-<astar.png, id=10, 282.05376pt x 443.6575pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 49--50
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 55--56
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 60--61
+
+ []
+
+<baseline.png, id=11, 282.05376pt x 443.6575pt>
+File: baseline.png Graphic file (type png)
+ <use baseline.png>
+Package pdftex.def Info: baseline.png used on input line 67.
+(pdftex.def)             Requested size: 108.405pt x 170.51418pt.
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 74--75
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 76--77
+
+ []
+
+<astar.png, id=17, 282.05376pt x 443.6575pt>
 File: astar.png Graphic file (type png)
  <use astar.png>
-Package pdftex.def Info: astar.png used on input line 61.
+Package pdftex.def Info: astar.png used on input line 81.
 (pdftex.def)             Requested size: 108.405pt x 170.51418pt.
- [2 <C:/Users/Bobby/Documents/GitHub/flight-planner/report/astar.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 77--79
+ [3 <C:/Users/Bobby/Documents/GitHub/flight-planner/report/baseline.png> <C:/Users/Bobby/Documents/GitHub/flight-planner
+/report/astar.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 97--99
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--81
+Underfull \hbox (badness 10000) in paragraph at lines 100--101
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--96
+Underfull \hbox (badness 10000) in paragraph at lines 114--115
 
  []
 
-[3]
-Underfull \hbox (badness 5817) in paragraph at lines 97--98
+
+Underfull \hbox (badness 5817) in paragraph at lines 116--117
 \OT1/cmr/m/n/10 bors.nearestNeighborsRegression() model which
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 105--106
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 110--111
-
- []
-
-<baseline.png, id=19, 282.05376pt x 443.6575pt>
-File: baseline.png Graphic file (type png)
- <use baseline.png>
-Package pdftex.def Info: baseline.png used on input line 118.
-(pdftex.def)             Requested size: 108.405pt x 170.51418pt.
-
+[4]
 Underfull \hbox (badness 10000) in paragraph at lines 123--124
 
  []
 
-<results.png, id=20, 362.85562pt x 219.82124pt>
+<results.png, id=24, 363.60844pt x 218.31563pt>
 File: results.png Graphic file (type png)
  <use results.png>
 Package pdftex.def Info: results.png used on input line 140.
-(pdftex.def)             Requested size: 216.81pt x 131.34702pt.
- <time.png, id=21, 362.85562pt x 218.31563pt>
+(pdftex.def)             Requested size: 216.81pt x 130.17755pt.
+ <time.png, id=25, 363.60844pt x 217.5628pt>
 File: time.png Graphic file (type png)
 
 <use time.png>
-Package pdftex.def Info: time.png used on input line 141.
-(pdftex.def)             Requested size: 216.81pt x 130.44739pt.
- [4 <C:/Users/Bobby/Documents/GitHub/flight-planner/report/baseline.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 153--154
+Package pdftex.def Info: time.png used on input line 144.
+(pdftex.def)             Requested size: 216.81pt x 129.72867pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 150--151
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--156
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 160--161
 
  []
 
 [5 <C:/Users/Bobby/Documents/GitHub/flight-planner/report/results.png> <C:/Users/Bobby/Documents/GitHub/flight-planner/r
 eport/time.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 165--166
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 []\OT1/cmr/m/n/10 "Great-circle Dis-tance". $\OT1/cmtt/m/n/10 http : / / en .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 165--166
+Underfull \hbox (badness 10000) in paragraph at lines 172--173
 \OT1/cmtt/m/n/10 wikipedia . org / wiki / Great-[]circle _
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 170--171
+Underfull \hbox (badness 10000) in paragraph at lines 177--178
 []\OT1/cmr/m/n/10 "Random For-est". $\OT1/cmtt/m/n/10 http : / / en . wikipedia .
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 172--173
+Underfull \hbox (badness 10000) in paragraph at lines 179--180
 []\OT1/cmr/m/n/10 "GE Flight Quest 2 Ba-sic Agents".
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 172--173
+Underfull \hbox (badness 10000) in paragraph at lines 179--180
 \OT1/cmtt/m/n/10 https : / / github . com / benhamner /
  []
 
@@ -366,20 +407,21 @@ Underfull \hbox (badness 10000) in paragraph at lines 172--173
 Here is how much of TeX's memory you used:
  3142 strings out of 494045
  47706 string characters out of 3145968
- 200811 words of memory out of 3000000
+ 211811 words of memory out of 3000000
  6429 multiletter control sequences out of 15000+200000
  8063 words of font info for 29 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 36i,6n,38p,1397b,360s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 36i,6n,38p,1241b,353s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/p
 ublic/amsfonts/cm/cmbx10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program Fi
 les (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/ams
 fonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cms
-y10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on report.pdf (6 pages, 641397 bytes).
+iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr
+7.pfb><C:/Program Files (x86)/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX 2.9/fo
+nts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on report.pdf (6 pages, 652902 bytes).
 PDF statistics:
- 57 PDF objects out of 1000 (max. 8388607)
+ 61 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
